@@ -1,0 +1,11 @@
+package com.zer0s2m.keeper.enum
+
+enum class Screen {
+
+    PROJECT_DASHBOARD_SCREEN,
+
+    COLLECTION_PROJECT_DASHBOARD_SCREEN,
+
+    ORGANIZATION_DASHBOARD_SCREEN
+
+}
