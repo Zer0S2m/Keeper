@@ -22,6 +22,7 @@ kotlin {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(libs.kotlinx.coroutines.core)
+            implementation("com.google.code.gson:gson:2.7")
         }
 
         commonTest.dependencies {

@@ -7,6 +7,8 @@ package com.zer0s2m.keeper.enum
  */
 enum class Icon(val path: String) {
 
-    ICON_GITHUB("icons/icon-github.svg")
+    ICON_GITHUB("icons/icon-github.svg"),
+
+    ICON_ADD("icons/icon-add.svg")
 
 }

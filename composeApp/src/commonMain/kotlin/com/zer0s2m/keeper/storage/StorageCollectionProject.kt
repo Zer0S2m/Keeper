@@ -5,7 +5,7 @@ import com.zer0s2m.keeper.dto.CollectionProject
 /**
  * Basic storage for collections.
  */
-object StorageCollectionProject {
+object StorageCollectionProject : Storage {
 
     /**
      * Current selected collection.

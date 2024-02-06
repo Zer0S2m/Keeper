@@ -1,6 +1,12 @@
 package com.zer0s2m.keeper.utils
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.enum.Config
+import com.zer0s2m.keeper.storage.StorageOrganization
+import java.io.File
+import java.lang.reflect.Type
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -10,6 +16,15 @@ import java.nio.file.Path
 internal fun loadStorageOrganization() {
     checkExistsDirectoryConfig()
     checkExistsFileDBDTO(Config.PATH_DB_ORGANIZATION.path)
+
+    val data: String = File(Config.PATH_DB_ORGANIZATION.path)
+        .inputStream()
+        .readBytes()
+        .toString(Charsets.UTF_8)
+    val type: Type = object : TypeToken<Collection<Organization>>() {}.type
+    val readyData: Collection<Organization> = Gson().fromJson(data, type)
+
+    StorageOrganization.setup(readyData)
 }
 
 /**

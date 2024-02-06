@@ -5,7 +5,7 @@ import com.zer0s2m.keeper.dto.Project
 /**
  * Basic storage for projects.
  */
-object StorageProject {
+object StorageProject : Storage {
 
     /**
      * Current selected project.
