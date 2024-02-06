@@ -1,4 +1,4 @@
-package com.zer0s2m.keeper
+package com.zer0s2m.keeper.utils
 
 import java.awt.Desktop
 import java.net.URI

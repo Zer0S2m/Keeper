@@ -43,12 +43,16 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.AppImage)
-            packageName = "com.zer0s2m.keeper.desktopApp"
+            packageName = "Keeper"
+            description = "Collections for API"
             packageVersion = "1.0.0"
+            licenseFile.set(project.file("../LICENSE"))
 
             linux {
                 packageVersion = "1.0.0"
             }
+
+            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
         }
     }
 }
