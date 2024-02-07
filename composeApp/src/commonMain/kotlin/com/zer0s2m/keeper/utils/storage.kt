@@ -12,6 +12,8 @@ import java.lang.reflect.Type
 import java.nio.file.Files
 import java.nio.file.Path
 
+// TODO: Saving the current user state
+
 /**
  * Load configuration for organizations.
  */

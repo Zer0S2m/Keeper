@@ -36,6 +36,16 @@ object StorageProject : Storage {
         addAllProject(projects)
     }
 
+    internal fun setCurrentProject(project: Project?) {
+        currentProject.value = project
+    }
+
+    /**
+     * Get all available projects for the selected organization by ID.
+     *
+     * @param organizationID Organization ID.
+     * @return Available projects.
+     */
     internal fun getAllProjectByOrganizationID(organizationID: Long): Collection<Project> {
         return projects.value.filter { project: Project ->
             project.organizationID == organizationID

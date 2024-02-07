@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -74,7 +73,7 @@ fun RightOrganizationPanel(
  * @param modifier The modifier to apply to this layout.
  */
 @Composable
-fun PanelProjects(
+fun RightProjectsPanel(
     projects: MutableState<MutableList<Project>>,
     modifier: Modifier = Modifier
 ) {
@@ -83,7 +82,7 @@ fun PanelProjects(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(projects.value) { project ->
-            Text(project.title)
+            CardItemProject(project)
         }
     }
 }

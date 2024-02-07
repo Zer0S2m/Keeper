@@ -3,13 +3,14 @@ package com.zer0s2m.keeper.actions
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.screen.OrganizationDashboard
 import com.zer0s2m.keeper.storage.StorageOrganization
+import com.zer0s2m.keeper.storage.StorageProject
 
 /**
  * Action repository - organizations.
  */
 object ActionOrganization : Action {
 
-    fun createOrganization() {
+    internal fun createOrganization() {
         println(true)
     }
 
@@ -18,8 +19,9 @@ object ActionOrganization : Action {
      *
      * @param organization New current active organization.
      */
-    fun changeOrganization(organization: Organization) {
+    internal fun changeOrganization(organization: Organization) {
         StorageOrganization.setCurrentOrganization(organization)
+        StorageProject.setCurrentProject(null)
     }
 
 }

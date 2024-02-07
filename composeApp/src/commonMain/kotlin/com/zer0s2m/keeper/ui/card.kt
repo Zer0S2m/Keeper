@@ -18,9 +18,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zer0s2m.keeper.actions.ActionOrganization
+import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.Organization
+import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.utils.formatTitleOrganization
 
 /**
@@ -54,6 +56,32 @@ fun CardItemOrganization(organization: Organization) {
                 fontWeight = FontWeight.Bold,
                 lineHeight = 1.sp
             )
+        }
+    }
+}
+
+/**
+ * Component - project.
+ *
+ * Available actions:
+ *
+ * 1) When you click on a component, the project will change
+ *
+ * @param project Organization for project.
+ */
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+fun CardItemProject(project: Project) {
+    Card(
+        modifier = Modifier
+            .semantics { role = Role.Button }
+            .fillMaxWidth()
+            .pointerHoverIcon(icon = PointerIcon.Hand)
+            .onClick { ActionProject.changeProject(project) },
+        shape = RoundedCornerShape(SHAPE),
+    ) {
+        Column(modifier = Modifier.padding(PADDING * 2, PADDING)) {
+            Text(text = project.title)
         }
     }
 }

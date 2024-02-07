@@ -3,6 +3,7 @@ package com.zer0s2m.keeper.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +56,17 @@ class OrganizationDashboard(override val navigationController: NavigationControl
 
                 if (StorageOrganization.getCurrentOrganization() != null) {
                     PanelProjects(navigationController = navigationController)
+                    Divider(
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
+                    )
+                }
+                if (StorageProject.getCurrentProject() != null) {
+                    StorageProject.getCurrentProject()?.let {
+                        Text(text = it.title)
+                    }
                 }
             }
         }
@@ -101,26 +113,21 @@ private fun RightPanel() {
  */
 @Composable
 private fun PanelProjects(navigationController: NavigationController) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(200.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            StorageOrganization.getCurrentOrganization()?.let {
-                Column(modifier = Modifier.fillMaxHeight().padding(PADDING * 2)) {
-                    ProjectDashboard(navigationController)
-                        .setProjects(StorageProject.getAllProjectByOrganizationID(it.id))
-                        .render()
-                }
-            }
-            Divider(
-                color = Color.Gray,
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(200.dp)
+    ) {
+        StorageOrganization.getCurrentOrganization()?.let {
+            Column(
                 modifier = Modifier
-                    .width(1.dp)
                     .fillMaxHeight()
-            )
+                    .padding(PADDING * 2)
+            ) {
+                ProjectDashboard(navigationController)
+                    .setProjects(StorageProject.getAllProjectByOrganizationID(it.id))
+                    .render()
+            }
         }
     }
 }
