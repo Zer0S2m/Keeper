@@ -3,7 +3,6 @@ package com.zer0s2m.keeper.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,6 +12,7 @@ import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageOrganization
+import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.ui.BaseDashboard
 import com.zer0s2m.keeper.ui.ButtonAddOrganization
 import com.zer0s2m.keeper.ui.RightOrganizationPanel
@@ -52,10 +52,9 @@ class OrganizationDashboard(override val navigationController: NavigationControl
                         .width(1.dp)
                         .fillMaxHeight()
                 )
-                Column(modifier = Modifier.fillMaxSize()) {
-                    StorageOrganization.getCurrentOrganization()?.let {
-                        Text(text = it.title)
-                    }
+
+                if (StorageOrganization.getCurrentOrganization() != null) {
+                    PanelProjects(navigationController = navigationController)
                 }
             }
         }
@@ -73,9 +72,10 @@ class OrganizationDashboard(override val navigationController: NavigationControl
  */
 @Composable
 private fun RightPanel() {
-    Column(modifier = Modifier
-        .width(52.dp)
-        .padding(PADDING)
+    Column(
+        modifier = Modifier
+            .width(52.dp)
+            .padding(PADDING)
     ) {
         RightOrganizationPanel(
             organizations = StorageOrganization.getOrganization(),
@@ -87,5 +87,40 @@ private fun RightPanel() {
             shape = RoundedCornerShape(SHAPE),
             onClick = { ActionOrganization.createOrganization() }
         )
+    }
+}
+
+/**
+ * Panel - projects.
+ *
+ * Includes:
+ *
+ * 1) All available projects by the selected active organization.
+ *
+ * @param navigationController Controller for walking between screens.
+ */
+@Composable
+private fun PanelProjects(navigationController: NavigationController) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(200.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            StorageOrganization.getCurrentOrganization()?.let {
+                Column(modifier = Modifier.fillMaxHeight().padding(PADDING * 2)) {
+                    ProjectDashboard(navigationController)
+                        .setProjects(StorageProject.getAllProjectByOrganizationID(it.id))
+                        .render()
+                }
+            }
+            Divider(
+                color = Color.Gray,
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+            )
+        }
     }
 }

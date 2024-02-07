@@ -22,7 +22,7 @@ object StorageOrganization : Storage {
     /**
      * Get all available organizations.
      */
-    fun getOrganization(): MutableState<MutableList<Organization>> {
+    internal fun getOrganization(): MutableState<MutableList<Organization>> {
         return organization
     }
 
@@ -31,7 +31,7 @@ object StorageOrganization : Storage {
      *
      * @return An active organization.
      */
-    fun getCurrentOrganization(): Organization? {
+    internal fun getCurrentOrganization(): Organization? {
         return currentOrganization.value
     }
 
