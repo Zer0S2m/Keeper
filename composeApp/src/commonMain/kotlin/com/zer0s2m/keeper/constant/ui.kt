@@ -11,3 +11,8 @@ internal expect val PADDING: Dp
  * Basic rounding.
  */
 internal expect val SHAPE: Dp
+
+/**
+ * Basic space.
+ */
+internal expect val SPACED: Dp

@@ -64,7 +64,7 @@ fun ButtonGitHub(
 }
 
 /**
- * Button component - creating a new organization.
+ * Button component - creating a new object.
  *
  * @param onClick Will be called when the user clicks the button.
  * @param modifier Modifier to be applied to the layout corresponding to the [Surface].
@@ -74,7 +74,7 @@ fun ButtonGitHub(
  */
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
-fun ButtonAddOrganization(
+fun ButtonAdd(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     modifierButton: Modifier = Modifier,

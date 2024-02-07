@@ -1,16 +1,22 @@
 package com.zer0s2m.keeper.screen
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
+import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.ui.BaseDashboard
+import com.zer0s2m.keeper.ui.ButtonAdd
 import com.zer0s2m.keeper.ui.RightProjectsPanel
 
 /**
@@ -27,12 +33,29 @@ class ProjectDashboard(override val navigationController: NavigationController) 
      */
     @Composable
     override fun render() {
-        Text(
-            text = "PROJECTS (${projects.value.size})",
-            fontSize = 14.sp,
-            lineHeight = 1.sp,
-            modifier = Modifier.padding(bottom = PADDING * 3)
-        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(bottom = PADDING * 3)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "PROJECTS (${projects.value.size})",
+                fontSize = 14.sp,
+                lineHeight = 0.sp
+            )
+            ButtonAdd(
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(28.dp),
+                modifierButton = Modifier
+                    .height(20.dp)
+                    .width(28.dp),
+                shape = RoundedCornerShape(SHAPE),
+                onClick = { ActionProject.createProject() }
+            )
+        }
         RightProjectsPanel(projects)
     }
 

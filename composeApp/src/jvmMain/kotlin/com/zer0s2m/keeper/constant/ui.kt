@@ -12,3 +12,8 @@ internal actual val PADDING: Dp = 4.dp
  * Basic rounding.
  */
 internal actual val SHAPE: Dp = 4.dp
+
+/**
+ * Basic space.
+ */
+internal actual val SPACED: Dp = 4.dp

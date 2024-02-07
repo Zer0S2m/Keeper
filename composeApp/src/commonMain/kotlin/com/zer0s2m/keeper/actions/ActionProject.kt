@@ -9,6 +9,10 @@ import com.zer0s2m.keeper.storage.StorageState
  */
 object ActionProject : Action {
 
+    internal fun createProject() {
+        println(true)
+    }
+
     /**
      * Set up a new active project.
      *

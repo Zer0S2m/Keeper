@@ -15,7 +15,7 @@ import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.ui.BaseDashboard
-import com.zer0s2m.keeper.ui.ButtonAddOrganization
+import com.zer0s2m.keeper.ui.ButtonAdd
 import com.zer0s2m.keeper.ui.RightOrganizationPanel
 import com.zer0s2m.keeper.ui.TopPanel
 
@@ -93,7 +93,7 @@ private fun RightPanel() {
             organizations = StorageOrganization.getOrganization(),
             modifier = Modifier.fillMaxWidth()
         )
-        ButtonAddOrganization(
+        ButtonAdd(
             modifier = Modifier.fillMaxWidth(),
             modifierButton = Modifier.height(40.dp),
             shape = RoundedCornerShape(SHAPE),
