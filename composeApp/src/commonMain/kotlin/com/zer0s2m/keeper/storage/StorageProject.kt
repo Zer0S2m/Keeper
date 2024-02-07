@@ -32,6 +32,10 @@ object StorageProject : Storage {
         return this.projects.value.addAll(projects)
     }
 
+    internal fun getProjects(): MutableState<MutableList<Project>> {
+        return projects
+    }
+
     internal fun setup(projects: Collection<Project>) {
         addAllProject(projects)
     }

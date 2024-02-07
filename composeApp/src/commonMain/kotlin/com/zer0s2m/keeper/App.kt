@@ -12,6 +12,7 @@ import com.zer0s2m.keeper.theme.AppTheme
 import com.zer0s2m.keeper.utils.loadStorageCollection
 import com.zer0s2m.keeper.utils.loadStorageOrganization
 import com.zer0s2m.keeper.utils.loadStorageProjects
+import com.zer0s2m.keeper.utils.loadStorageState
 
 @Composable
 internal fun App() = AppTheme {
@@ -20,6 +21,7 @@ internal fun App() = AppTheme {
     loadStorageOrganization()
     loadStorageProjects()
     loadStorageCollection()
+    loadStorageState() // Load with the latest
 
     Surface(
         modifier = Modifier.fillMaxSize()

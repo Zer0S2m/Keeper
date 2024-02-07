@@ -2,8 +2,10 @@ package com.zer0s2m.keeper.utils
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.zer0s2m.keeper.actions.ActionState
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
+import com.zer0s2m.keeper.dto.State
 import com.zer0s2m.keeper.enum.Config
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
@@ -11,8 +13,6 @@ import java.io.File
 import java.lang.reflect.Type
 import java.nio.file.Files
 import java.nio.file.Path
-
-// TODO: Saving the current user state
 
 /**
  * Load configuration for organizations.
@@ -54,6 +54,23 @@ internal fun loadStorageProjects() {
 internal fun loadStorageCollection() {
     checkExistsDirectoryConfig()
     checkExistsFileDBDTO(Config.PATH_DB_COLLECTION.path)
+}
+
+/**
+ * Load configuration for state.
+ */
+internal fun loadStorageState() {
+    checkExistsDirectoryConfig()
+    checkExistsFileDBDTO(Config.PATH_DB_STATE.path)
+
+    val data: String = File(Config.PATH_DB_STATE.path)
+        .inputStream()
+        .readBytes()
+        .toString(Charsets.UTF_8)
+    val readyData: State = Gson().fromJson(data, State::class.java)
+
+    ActionState.setOrganization(readyData.organizationID)
+    ActionState.setProject(readyData.projectID)
 }
 
 /**
