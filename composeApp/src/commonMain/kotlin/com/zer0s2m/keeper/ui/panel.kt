@@ -9,7 +9,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.zer0s2m.keeper.constant.SHAPE
-import com.zer0s2m.keeper.constant.SPACED
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.utils.openUrl
@@ -51,11 +50,11 @@ fun RightOrganizationPanel(
     organizations: MutableState<MutableList<Organization>>,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(SPACED * 2)
-    ) {
-        items(organizations.value) { organization ->
+    LazyColumn(modifier = modifier) {
+        items(
+            items = organizations.value,
+            key = { it.id }
+        ) { organization ->
             CardItemOrganization(
                 organization = organization
             )
@@ -78,10 +77,7 @@ fun RightProjectsPanel(
     projects: MutableState<MutableList<Project>>,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(SPACED * 2)
-    ) {
+    LazyColumn(modifier = modifier) {
         items(projects.value) { project ->
             CardItemProject(project)
         }

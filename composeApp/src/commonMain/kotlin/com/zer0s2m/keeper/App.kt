@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.zer0s2m.keeper.enum.Screen
 import com.zer0s2m.keeper.navigation.graphs.CollectScreenOrganizationDashboard
@@ -18,11 +20,16 @@ import com.zer0s2m.keeper.utils.loadStorageState
 @Composable
 internal fun App() = AppTheme {
     val navigationController by rememberNavigationController(Screen.ORGANIZATION_DASHBOARD_SCREEN.name)
+    val isLoadData = remember { mutableStateOf(false) }
 
-    loadStorageOrganization()
-    loadStorageProjects()
-    loadStorageCollection()
-    loadStorageState() // Load with the latest
+    if (!isLoadData.value) {
+        loadStorageOrganization()
+        loadStorageProjects()
+        loadStorageCollection()
+        loadStorageState() // Load with the latest
+    }
+
+    isLoadData.value = true
 
     Surface(
         modifier = Modifier.fillMaxSize()

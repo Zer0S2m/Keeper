@@ -5,14 +5,29 @@ import com.zer0s2m.keeper.screen.OrganizationDashboard
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.storage.StorageState
+import com.zer0s2m.keeper.ui.ModalPopupCreateOrganization
 
 /**
  * Action repository - organizations.
  */
 object ActionOrganization : Action {
 
-    internal fun createOrganization() {
-        println(true)
+    internal fun openModalCreateOrganizationPopup(state: Boolean) {
+        StorageOrganization.setExpandedStateModalCreateOrganizationPopup(state)
+    }
+
+    internal fun createOrganization(organization: Organization) {
+        openModalCreateOrganizationPopup(false)
+        StorageOrganization.addOrganization(organization)
+    }
+
+    /**
+     * Cancel the creation of an organization. Following steps when canceling:
+     *
+     * 1) Change the state of the modal window [ModalPopupCreateOrganization] to `inactive`.
+     */
+    internal fun cancelCreateOrganization() {
+        StorageOrganization.setExpandedStateModalCreateOrganizationPopup(false)
     }
 
     /**

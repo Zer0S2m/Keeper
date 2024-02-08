@@ -14,7 +14,7 @@ object ActionState : Action {
      * @param organizationID Organization ID.
      */
     internal fun setOrganization(organizationID: Long?) {
-        StorageOrganization.getOrganization().value.find { it.id == organizationID }
+        StorageOrganization.getAllOrganizations().value.find { it.id == organizationID }
             ?.let { StorageOrganization.setCurrentOrganization(it) }
     }
 

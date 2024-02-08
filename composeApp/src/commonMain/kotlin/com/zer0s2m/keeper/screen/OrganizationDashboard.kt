@@ -1,6 +1,7 @@
 package com.zer0s2m.keeper.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -14,10 +15,7 @@ import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
-import com.zer0s2m.keeper.ui.BaseDashboard
-import com.zer0s2m.keeper.ui.ButtonAdd
-import com.zer0s2m.keeper.ui.RightOrganizationPanel
-import com.zer0s2m.keeper.ui.TopPanel
+import com.zer0s2m.keeper.ui.*
 
 /**
  * Screen to show available organizations.
@@ -31,6 +29,8 @@ class OrganizationDashboard(override val navigationController: NavigationControl
      */
     @Composable
     override fun render() {
+        ModalPopupCreateOrganization(stateModal = StorageOrganization.expandedStateModalCreateOrganizationPopup)
+
         Column {
             Column(
                 modifier = Modifier
@@ -90,14 +90,14 @@ private fun RightPanel() {
             .padding(PADDING)
     ) {
         RightOrganizationPanel(
-            organizations = StorageOrganization.getOrganization(),
+            organizations = StorageOrganization.getAllOrganizations(),
             modifier = Modifier.fillMaxWidth()
         )
         ButtonAdd(
             modifier = Modifier.fillMaxWidth(),
             modifierButton = Modifier.height(40.dp),
             shape = RoundedCornerShape(SHAPE),
-            onClick = { ActionOrganization.createOrganization() }
+            onClick = { ActionOrganization.openModalCreateOrganizationPopup(true) }
         )
     }
 }
