@@ -112,3 +112,23 @@ internal fun saveStorageState() {
         it.write(gson.toJson(StorageState.getStateDTO()))
     }
 }
+
+/**
+ * Save organizations to a configuration file.
+ */
+internal fun saveStorageOrganization() {
+    PrintWriter(FileWriter(Config.PATH_DB_ORGANIZATION.path)).use {
+        val gson = Gson()
+        it.write(gson.toJson(StorageOrganization.getAllOrganizations().value))
+    }
+}
+
+/**
+ * Save projects to a configuration file.
+ */
+internal fun saveStorageProject() {
+    PrintWriter(FileWriter(Config.PATH_DB_PROJECT.path)).use {
+        val gson = Gson()
+        it.write(gson.toJson(StorageProject.getProjects().value))
+    }
+}

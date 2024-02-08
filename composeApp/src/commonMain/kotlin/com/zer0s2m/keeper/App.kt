@@ -39,5 +39,7 @@ internal fun App() = AppTheme {
 }
 
 internal fun exit() {
+    saveStorageOrganization()
+    saveStorageProject()
     saveStorageState()
 }
