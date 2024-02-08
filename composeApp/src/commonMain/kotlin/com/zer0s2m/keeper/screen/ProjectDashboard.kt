@@ -15,8 +15,10 @@ import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.navigation.NavigationController
+import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.ui.BaseDashboard
 import com.zer0s2m.keeper.ui.ButtonAdd
+import com.zer0s2m.keeper.ui.ModalPopupCreateProject
 import com.zer0s2m.keeper.ui.RightProjectsPanel
 
 /**
@@ -33,6 +35,8 @@ class ProjectDashboard(override val navigationController: NavigationController) 
      */
     @Composable
     override fun render() {
+        ModalPopupCreateProject(stateModal = StorageProject.expandedStateModalCreateProjectPopup)
+
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -54,7 +58,7 @@ class ProjectDashboard(override val navigationController: NavigationController) 
                     .height(20.dp)
                     .width(28.dp),
                 shape = RoundedCornerShape(SHAPE),
-                onClick = { ActionProject.createProject() }
+                onClick = { ActionProject.openModalCreateProjectPopup(true) }
             )
         }
         RightProjectsPanel(projects)

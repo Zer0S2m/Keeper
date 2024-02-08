@@ -38,7 +38,6 @@ object StorageOrganization : Storage {
      * Add organizations.
      *
      * @param organization Organization.
-     * @return True if the list was changed as the result of the operation.
      */
     internal fun addOrganization(organization: Organization) {
         val newOrganizations: MutableList<Organization> = mutableListOf()
@@ -51,13 +50,18 @@ object StorageOrganization : Storage {
     /**
      * Add organizations.
      *
-     * @param organization Organizations.
+     * @param organizations Organizations.
      * @return True if the list was changed as the result of the operation.
      */
-    internal fun addAllOrganization(organization: Collection<Organization>): Boolean {
-        return organizations.value.addAll(organization)
+    internal fun addAllOrganization(organizations: Collection<Organization>): Boolean {
+        return this.organizations.value.addAll(organizations)
     }
 
+    /**
+     * Get all available organizations.
+     *
+     * @return Organizations.
+     */
     internal fun getAllOrganizations(): MutableState<MutableList<Organization>> {
         return organizations
     }
@@ -71,6 +75,11 @@ object StorageOrganization : Storage {
         currentOrganization.value = organization
     }
 
+    /**
+     * Set the state of the modal window - creating an organization.
+     *
+     * @param value `Active` or `inactive`.
+     */
     internal fun setExpandedStateModalCreateOrganizationPopup(value: Boolean) {
         expandedStateModalCreateOrganizationPopup.value = value
     }
@@ -89,20 +98,8 @@ object StorageOrganization : Storage {
      *
      * @return Latest unique identifier.
      */
-    internal fun getLastID(): Long {
-        if (organizations.value.isEmpty()) {
-            return 0
-        }
-
-        var lastID: Long = 0
-
-        organizations.value.forEach {
-            if (it.id > lastID) {
-                lastID = it.id
-            }
-        }
-
-        return lastID
+    fun getLastID(): Long {
+        return getLastID(models = organizations.value)
     }
 
 }

@@ -21,10 +21,13 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
 import com.zer0s2m.keeper.actions.ActionOrganization
+import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.Organization
+import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.storage.StorageOrganization
+import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.theme.md_theme_light_error
 import com.zer0s2m.keeper.validation.NotEmptyValidator
 import com.zer0s2m.keeper.validation.Validator
@@ -156,10 +159,7 @@ internal fun ModalPopupCreateOrganization(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
-                    modifier = Modifier
-                        .width((BASE_WIDTH_POPUP - (PADDING * 4)) / 2 - 12.dp)
-                        .pointerHoverIcon(PointerIcon.Hand),
+                BaseButtonModal(
                     onClick = {
                         val validation: Validator = NotEmptyValidator()
                         if (!validation.validate(text)) {
@@ -167,20 +167,101 @@ internal fun ModalPopupCreateOrganization(
                             hasError = true
                         } else {
                             ActionOrganization.openModalCreateOrganizationPopup(false)
-                            ActionOrganization.createOrganization(Organization(
-                                StorageOrganization.getLastID() + 1,
-                                text.trim()
-                            ))
+                            ActionOrganization.createOrganization(
+                                Organization(
+                                    StorageOrganization.getLastID() + 1,
+                                    text.trim()
+                                )
+                            )
                         }
                     }
                 ) {
-                    Text("Save")
+                    Text("save")
                 }
-                Button(
-                    modifier = Modifier
-                        .width((BASE_WIDTH_POPUP - (PADDING * 4)) / 2 - 12.dp)
-                        .pointerHoverIcon(PointerIcon.Hand),
+                BaseButtonModal(
                     onClick = { ActionOrganization.cancelCreateOrganization() },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = md_theme_light_error,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Cancel")
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Modal window - creating a project.
+ *
+ * @param stateModal Modal window states.
+ */
+@Composable
+internal fun ModalPopupCreateProject(
+    stateModal: MutableState<Boolean>
+) {
+    ModalPopup(
+        stateModal = stateModal,
+        modifierLayout = Modifier
+            .width(BASE_WIDTH_POPUP)
+            .height(BASE_HEIGHT_POPUP)
+    ) {
+        TitleModalPopup(text = "Creating a project")
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            var text: String by remember { mutableStateOf("") }
+            var hasError: Boolean by remember { mutableStateOf(false) }
+            var label: String by remember { mutableStateOf("Title") }
+
+            TextField(
+                value = text,
+                isError = hasError,
+                label = {
+                    Text(text = label)
+                },
+                onValueChange = { value ->
+                    hasError = false
+                    text = value
+                    label = "Title"
+                },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                minLines = 1
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                BaseButtonModal(
+                    onClick = {
+                        val validation: Validator = NotEmptyValidator()
+                        if (!validation.validate(text)) {
+                            label = validation.msg
+                            hasError = true
+                        } else {
+                            ActionProject.openModalCreateProjectPopup(false)
+                            StorageOrganization.getCurrentOrganization()?.let {
+                                ActionProject.createProject(
+                                    Project(
+                                        StorageProject.getLastID() + 1,
+                                        it.id,
+                                        text.trim()
+                                    )
+                                )
+                            }
+                        }
+                    }
+                ) {
+                    Text("save")
+                }
+                BaseButtonModal(
+                    onClick = { ActionProject.cancelCreateProject() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = md_theme_light_error,
                         contentColor = Color.White
@@ -205,3 +286,25 @@ private fun TitleModalPopup(text: String) = Text(
     modifier = Modifier
         .padding(bottom = 20.dp)
 )
+
+/**
+ * Basic button for a modal window.
+ *
+ * @param onClick Will be called when the user clicks the button
+ * @param colors [ButtonColors] that will be used to resolve the background
+ * and content color for this button in different states.
+ */
+@Composable
+private fun BaseButtonModal(
+    onClick: () -> Unit,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    content: @Composable RowScope.() -> Unit
+) = Button(
+    modifier = Modifier
+        .width((BASE_WIDTH_POPUP - (PADDING * 4)) / 2 - 12.dp)
+        .pointerHoverIcon(PointerIcon.Hand),
+    onClick = onClick,
+    colors = colors
+) {
+    content()
+}
