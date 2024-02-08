@@ -9,7 +9,10 @@ import com.zer0s2m.keeper.dto.State
 import com.zer0s2m.keeper.enum.Config
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
+import com.zer0s2m.keeper.storage.StorageState
 import java.io.File
+import java.io.FileWriter
+import java.io.PrintWriter
 import java.lang.reflect.Type
 import java.nio.file.Files
 import java.nio.file.Path
@@ -94,5 +97,18 @@ private fun checkExistsFileDBDTO(path: String) {
     val pathDBFile: Path = Path.of(path)
     if (!Files.exists(pathDBFile)) {
         Files.createFile(pathDBFile)
+    }
+}
+
+/**
+ * Save the following application states:
+ *
+ * 1) Established active organization.
+ * 2) Installed aquatic project.
+ */
+internal fun saveStorageState() {
+    PrintWriter(FileWriter(Config.PATH_DB_STATE.path)).use {
+        val gson = Gson()
+        it.write(gson.toJson(StorageState.getStateDTO()))
     }
 }

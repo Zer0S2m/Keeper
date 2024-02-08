@@ -13,7 +13,7 @@ object ActionState : Action {
      *
      * @param organizationID Organization ID.
      */
-    internal fun setOrganization(organizationID: Long) {
+    internal fun setOrganization(organizationID: Long?) {
         StorageOrganization.getOrganization().value.find { it.id == organizationID }
             ?.let { StorageOrganization.setCurrentOrganization(it) }
     }
@@ -23,7 +23,7 @@ object ActionState : Action {
      *
      * @param projectID Project ID.
      */
-    internal fun setProject(projectID: Long) {
+    internal fun setProject(projectID: Long?) {
         StorageProject.setCurrentProject(StorageProject.getProjects().value.find { it.id == projectID })
     }
 

@@ -48,7 +48,8 @@ class ProjectDashboard(override val navigationController: NavigationController) 
             ButtonAdd(
                 modifier = Modifier
                     .height(20.dp)
-                    .width(28.dp),
+                    .width(28.dp)
+                    .padding(top = PADDING),
                 modifierButton = Modifier
                     .height(20.dp)
                     .width(28.dp),

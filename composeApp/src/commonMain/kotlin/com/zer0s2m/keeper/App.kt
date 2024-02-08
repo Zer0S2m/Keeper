@@ -9,6 +9,7 @@ import com.zer0s2m.keeper.enum.Screen
 import com.zer0s2m.keeper.navigation.graphs.CollectScreenOrganizationDashboard
 import com.zer0s2m.keeper.navigation.runtime.rememberNavigationController
 import com.zer0s2m.keeper.theme.AppTheme
+import com.zer0s2m.keeper.utils.*
 import com.zer0s2m.keeper.utils.loadStorageCollection
 import com.zer0s2m.keeper.utils.loadStorageOrganization
 import com.zer0s2m.keeper.utils.loadStorageProjects
@@ -28,4 +29,8 @@ internal fun App() = AppTheme {
     ) {
         CollectScreenOrganizationDashboard(navigationController)
     }
+}
+
+internal fun exit() {
+    saveStorageState()
 }
