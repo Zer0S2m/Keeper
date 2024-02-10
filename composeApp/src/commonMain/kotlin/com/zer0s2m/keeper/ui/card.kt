@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -22,6 +23,7 @@ import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
+import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.utils.formatTitleOrganization
@@ -85,6 +87,23 @@ fun CardItemProject(project: Project) {
     ) {
         Column(modifier = Modifier.padding(PADDING * 2, PADDING * 2)) {
             Text(text = project.title)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun CardItemCollectionProject(collectionProject: CollectionProject) {
+    OutlinedCard(
+        modifier = Modifier
+            .semantics { role = Role.Button }
+            .fillMaxWidth()
+            .pointerHoverIcon(icon = PointerIcon.Hand),
+        shape = RoundedCornerShape(SHAPE),
+        onClick = { println(collectionProject) }
+    ) {
+        Column(modifier = Modifier.padding(PADDING * 2, PADDING * 2)) {
+            Text(text = collectionProject.title)
         }
     }
 }

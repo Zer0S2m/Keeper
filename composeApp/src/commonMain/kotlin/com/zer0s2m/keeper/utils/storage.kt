@@ -3,10 +3,12 @@ package com.zer0s2m.keeper.utils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.zer0s2m.keeper.actions.ActionState
+import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.dto.State
 import com.zer0s2m.keeper.enum.Config
+import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.storage.StorageState
@@ -57,6 +59,15 @@ internal fun loadStorageProjects() {
 internal fun loadStorageCollection() {
     checkExistsDirectoryConfig()
     checkExistsFileDBDTO(Config.PATH_DB_COLLECTION.path)
+
+    val data: String = File(Config.PATH_DB_COLLECTION.path)
+        .inputStream()
+        .readBytes()
+        .toString(Charsets.UTF_8)
+    val type: Type = object : TypeToken<Collection<CollectionProject>>() {}.type
+    val readyData: Collection<CollectionProject> = Gson().fromJson(data, type)
+
+    StorageCollectionProject.setup(readyData)
 }
 
 /**

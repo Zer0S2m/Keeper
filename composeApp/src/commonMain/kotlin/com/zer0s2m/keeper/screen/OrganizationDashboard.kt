@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,6 +12,7 @@ import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.navigation.NavigationController
+import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.ui.*
@@ -65,7 +65,7 @@ class OrganizationDashboard(override val navigationController: NavigationControl
                 }
                 if (StorageProject.getCurrentProject() != null) {
                     StorageProject.getCurrentProject()?.let {
-                        Text(text = it.title)
+                        PanelCollectionsProject(navigationController = navigationController)
                     }
                 }
             }
@@ -124,8 +124,35 @@ private fun PanelProjects(navigationController: NavigationController) {
                     .fillMaxHeight()
                     .padding(PADDING * 2)
             ) {
-                ProjectDashboard(navigationController)
+                ProjectDashboard(navigationController = navigationController)
                     .setProjects(StorageProject.getAllProjectByOrganizationID(it.id))
+                    .render()
+            }
+        }
+    }
+}
+
+/**
+ * Panel - collections.
+ *
+ * Includes:
+ *
+ * 1) todo
+ *
+ * @param navigationController Controller for walking between screens.
+ */
+@Composable
+private fun PanelCollectionsProject(navigationController: NavigationController) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        StorageProject.getCurrentProject()?.let {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(PADDING * 2)
+            ) {
+                CollectionProjectDashboard(navigationController = navigationController)
+                    .setProjects(StorageCollectionProject
+                        .getAllCollectionsProjectByProjectID(it.id))
                     .render()
             }
         }

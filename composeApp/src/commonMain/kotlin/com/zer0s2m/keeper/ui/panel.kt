@@ -2,13 +2,18 @@ package com.zer0s2m.keeper.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
+import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.utils.openUrl
@@ -29,7 +34,7 @@ fun TopPanel() {
             modifier = Modifier.padding(start = 2.dp),
             shape = RoundedCornerShape(SHAPE),
             onClick = {
-                openUrl("https://github.com/Zer0S2m")
+                openUrl(url = "https://github.com/Zer0S2m")
             }
         )
     }
@@ -79,7 +84,31 @@ fun RightProjectsPanel(
 ) {
     LazyColumn(modifier = modifier) {
         items(projects.value) { project ->
-            CardItemProject(project)
+            CardItemProject(project = project)
+        }
+    }
+}
+
+/**
+ * Panel.
+ *
+ * Includes:
+ *
+ * 1) A list of all available collections in the identified active project
+ *
+ * @param collectionsProject Available collections.
+ */
+@Composable
+fun RightCollectionProjectPanel(
+    collectionsProject: MutableState<MutableList<CollectionProject>>
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 180.dp),
+        verticalArrangement = Arrangement.spacedBy(PADDING),
+        horizontalArrangement = Arrangement.spacedBy(PADDING * 2),
+    ) {
+        items(collectionsProject.value) { collectionProject ->
+            CardItemCollectionProject(collectionProject = collectionProject)
         }
     }
 }
