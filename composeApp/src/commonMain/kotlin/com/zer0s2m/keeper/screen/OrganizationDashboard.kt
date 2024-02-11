@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
+import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
 import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageOrganization
@@ -116,7 +117,7 @@ private fun PanelProjects(navigationController: NavigationController) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .width(200.dp)
+            .width(WIDTH_RIGHT_PANEL)
     ) {
         StorageOrganization.getCurrentOrganization()?.let {
             Column(

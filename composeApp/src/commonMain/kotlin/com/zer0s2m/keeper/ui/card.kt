@@ -9,11 +9,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerIcon
-import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -26,6 +28,7 @@ import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.constant.WIDTH_ACTIVE_CARD
+import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
@@ -58,10 +61,11 @@ fun CardItemOrganization(organization: Organization) {
         Row(modifier = Modifier.fillMaxSize()) {
             var offsetX: Dp = 0.dp
             if (organization == StorageOrganization.getCurrentOrganization()) {
-                Box(modifier = Modifier
-                    .height(38.dp)
-                    .width(WIDTH_ACTIVE_CARD)
-                    .background(md_theme_light_primary)
+                Box(
+                    modifier = Modifier
+                        .height(38.dp)
+                        .width(WIDTH_ACTIVE_CARD)
+                        .background(md_theme_light_primary)
                 )
                 offsetX = (-1).dp
             }
@@ -91,38 +95,76 @@ fun CardItemOrganization(organization: Organization) {
  * Available actions:
  *
  * 1) When you click on a component, the project will change
+ * 2) Deleting a project via drop-down menu.
+ *
+ * Contains:
+ *
+ * 1) Drop-down menu for project management
  *
  * @param project Organization for project.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 fun CardItemProject(project: Project) {
+    val expandedDropdownMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .semantics { role = Role.Button }
             .fillMaxWidth()
+            .onPointerEvent(
+                eventType = PointerEventType.Press,
+                pass = PointerEventPass.Final,
+            ) { event ->
+                if (event.button?.isSecondary == true) {
+                    expandedDropdownMenu.value = true
+                }
+            }
             .pointerHoverIcon(icon = PointerIcon.Hand),
         shape = RoundedCornerShape(SHAPE),
         interactionSource = remember { MutableInteractionSource() },
         onClick = { ActionProject.changeProject(project) }
     ) {
+        MenuDropdownProject(
+            modifier = Modifier.width(WIDTH_RIGHT_PANEL - (PADDING * 4)),
+            expanded = expandedDropdownMenu,
+            onClickDelete = { ActionProject.deleteProject(projectID = project.id) }
+        )
+
         Row(modifier = Modifier.fillMaxSize()) {
             var deletePadding: Dp = 0.dp
             if (project == StorageProject.getCurrentProject()) {
-                Box(modifier = Modifier
-                    .height(40.dp)
-                    .width(WIDTH_ACTIVE_CARD)
-                    .background(md_theme_light_primary)
+                Box(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(WIDTH_ACTIVE_CARD)
+                        .background(md_theme_light_primary)
                 )
                 deletePadding = WIDTH_ACTIVE_CARD
             }
-            Column(modifier = Modifier.padding(
-                start = (PADDING * 2) - deletePadding,
-                top = PADDING * 2,
-                end = PADDING * 2,
-                bottom = PADDING * 2
-            )) {
-                Text(text = project.title)
+
+            Column(
+                modifier = Modifier.padding(
+                    start = (PADDING * 2) - deletePadding,
+                    top = PADDING * 2,
+                    end = PADDING * 2,
+                    bottom = PADDING * 2
+                )
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(text = project.title)
+                    ButtonMenuRounded(
+                        onClick = { expandedDropdownMenu.value = true },
+                        modifier = Modifier
+                            .width(20.dp)
+                            .height(20.dp),
+                        shape = RoundedCornerShape(SHAPE)
+                    )
+                }
             }
         }
     }

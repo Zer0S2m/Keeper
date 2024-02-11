@@ -1,6 +1,7 @@
 package com.zer0s2m.keeper.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.PointerIcon
@@ -18,6 +20,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import com.zer0s2m.keeper.constant.PADDING
+import com.zer0s2m.keeper.theme.md_theme_light_surfaceVariant
 
 /**
  * Button - github.
@@ -95,6 +98,47 @@ fun ButtonAdd(
                 Image(
                     painter = painterResource(resourcePath = com.zer0s2m.keeper.enum.Icon.ICON_ADD.path),
                     contentDescription = "Add icon"
+                )
+            }
+        )
+    }
+}
+
+/**
+ * Button component - menu.
+ *
+ * @param onClick Will be called when the user clicks the button.
+ * @param modifier Modifier to be applied to the layout corresponding to the [Surface].
+ * @param modifierButton Modifier to be applied to the button.
+ * @param shape Defines the surface's shape as well its shadow.
+ * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
+ * @param backgroundImage Color to paint background with.
+ */
+@Composable
+@OptIn(ExperimentalMaterialApi::class)
+fun ButtonMenuRounded(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    modifierButton: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    enabled: Boolean = true,
+    backgroundImage: Color = md_theme_light_surfaceVariant
+) {
+    Surface(
+        onClick = onClick,
+        shape = shape,
+        modifier = modifier.semantics { role = Role.Button },
+        enabled = enabled
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifierButton.pointerHoverIcon(icon = PointerIcon.Hand),
+            content = {
+                Image(
+                    modifier = Modifier.background(color = backgroundImage),
+                    painter = painterResource(resourcePath = com.zer0s2m.keeper.enum.Icon.ICON_MENU_ROUNDED.path),
+                    contentDescription = "Menu icon"
                 )
             }
         )

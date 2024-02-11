@@ -74,8 +74,24 @@ object StorageCollectionProject : Storage {
         return getLastID(models = collectionsProject.value)
     }
 
+    /**
+     * Get all available collections.
+     *
+     * @return Available collections.
+     */
     internal fun getCollectionsProject(): MutableState<MutableList<CollectionProject>> {
         return collectionsProject
+    }
+
+    /**
+     * Delete all collections associated with the specified project in the form of `ID`.
+     *
+     * @param projectID Unique project identifier.
+     */
+    internal fun removeCollectionsProjectByProjectID(projectID: Long) {
+        collectionsProject.value = collectionsProject.value.filter {
+            it.projectID != projectID
+        }.toMutableList()
     }
 
 }

@@ -109,4 +109,15 @@ object StorageProject : Storage {
         return getLastID(models = projects.value)
     }
 
+    /**
+     * Deletes a project by unique identifier.
+     *
+     * @param projectID Unique identification.
+     */
+    internal fun removeProject(projectID: Long) {
+        projects.value = projects.value.filter { project: Project ->
+            project.id != projectID
+        }.toMutableList()
+    }
+
 }

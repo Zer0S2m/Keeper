@@ -1,6 +1,7 @@
 package com.zer0s2m.keeper.actions
 
 import com.zer0s2m.keeper.dto.Project
+import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.storage.StorageState
 import com.zer0s2m.keeper.ui.ModalPopupCreateProject
@@ -50,6 +51,21 @@ object ActionProject : Action {
         StorageProject.setCurrentProject(project = project)
 
         StorageState.setCurrentProjectID(projectID = project.id)
+    }
+
+    /**
+     * Removes the project from the system. Includes:
+     *
+     * 1) Deletes the project.
+     * 2) Deletes collections associated with this project.
+     * 3) Sets the current project to `null`.
+     *
+     * @param projectID Project ID.
+     */
+    internal fun deleteProject(projectID: Long) {
+        StorageProject.removeProject(projectID = projectID)
+        StorageCollectionProject.removeCollectionsProjectByProjectID(projectID = projectID)
+        StorageProject.setCurrentProject(null)
     }
 
 }

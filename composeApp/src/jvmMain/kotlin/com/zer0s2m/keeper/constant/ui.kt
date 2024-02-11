@@ -22,3 +22,8 @@ internal actual val SPACED: Dp = 4.dp
  * The base width for the element of the active card.
  */
 internal actual val WIDTH_ACTIVE_CARD: Dp = 3.dp
+
+/**
+ * The base width for the left panel.
+ */
+internal actual val WIDTH_RIGHT_PANEL: Dp = 200.dp
