@@ -16,3 +16,8 @@ internal expect val SHAPE: Dp
  * Basic space.
  */
 internal expect val SPACED: Dp
+
+/**
+ * The base width for the element of the active card.
+ */
+internal expect val WIDTH_ACTIVE_CARD: Dp

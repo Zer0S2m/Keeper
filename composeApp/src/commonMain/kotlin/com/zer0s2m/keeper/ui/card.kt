@@ -1,5 +1,6 @@
 package com.zer0s2m.keeper.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,15 +18,20 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
+import com.zer0s2m.keeper.constant.WIDTH_ACTIVE_CARD
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
+import com.zer0s2m.keeper.storage.StorageOrganization
+import com.zer0s2m.keeper.storage.StorageProject
+import com.zer0s2m.keeper.theme.md_theme_light_primary
 import com.zer0s2m.keeper.utils.formatTitleOrganization
 
 /**
@@ -49,17 +55,32 @@ fun CardItemOrganization(organization: Organization) {
         interactionSource = remember { MutableInteractionSource() },
         onClick = { ActionOrganization.changeOrganization(organization) }
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().padding(0.dp, PADDING * 2)
-        ) {
-            Text(
-                text = formatTitleOrganization(organization.title),
-                maxLines = 1,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 1.sp
-            )
+        Row(modifier = Modifier.fillMaxSize()) {
+            var offsetX: Dp = 0.dp
+            if (organization == StorageOrganization.getCurrentOrganization()) {
+                Box(modifier = Modifier
+                    .height(38.dp)
+                    .width(WIDTH_ACTIVE_CARD)
+                    .background(md_theme_light_primary)
+                )
+                offsetX = (-1).dp
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(0.dp, PADDING * 2)
+            ) {
+                Text(
+                    text = formatTitleOrganization(organization.title),
+                    maxLines = 1,
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = 1.sp,
+                    modifier = Modifier.offset(x = offsetX)
+                )
+            }
         }
     }
 }
@@ -85,8 +106,24 @@ fun CardItemProject(project: Project) {
         interactionSource = remember { MutableInteractionSource() },
         onClick = { ActionProject.changeProject(project) }
     ) {
-        Column(modifier = Modifier.padding(PADDING * 2, PADDING * 2)) {
-            Text(text = project.title)
+        Row(modifier = Modifier.fillMaxSize()) {
+            var deletePadding: Dp = 0.dp
+            if (project == StorageProject.getCurrentProject()) {
+                Box(modifier = Modifier
+                    .height(40.dp)
+                    .width(WIDTH_ACTIVE_CARD)
+                    .background(md_theme_light_primary)
+                )
+                deletePadding = WIDTH_ACTIVE_CARD
+            }
+            Column(modifier = Modifier.padding(
+                start = (PADDING * 2) - deletePadding,
+                top = PADDING * 2,
+                end = PADDING * 2,
+                bottom = PADDING * 2
+            )) {
+                Text(text = project.title)
+            }
         }
     }
 }
