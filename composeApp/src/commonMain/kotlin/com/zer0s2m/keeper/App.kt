@@ -42,4 +42,5 @@ internal fun exit() {
     saveStorageOrganization()
     saveStorageProject()
     saveStorageState()
+    saveStorageCollection()
 }

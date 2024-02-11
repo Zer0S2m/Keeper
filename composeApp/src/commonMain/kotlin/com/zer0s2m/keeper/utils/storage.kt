@@ -143,3 +143,13 @@ internal fun saveStorageProject() {
         it.write(gson.toJson(StorageProject.getProjects().value))
     }
 }
+
+/**
+ * Save collections to a configuration file.
+ */
+internal fun saveStorageCollection() {
+    PrintWriter(FileWriter(Config.PATH_DB_COLLECTION.path)).use {
+        val gson = Gson()
+        it.write(gson.toJson(StorageCollectionProject.getCollectionsProject().value))
+    }
+}

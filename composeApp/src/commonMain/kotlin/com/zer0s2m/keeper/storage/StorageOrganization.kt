@@ -89,7 +89,7 @@ object StorageOrganization : Storage {
      *
      * @param organization Organizations.
      */
-    internal fun setup(organization: Collection<Organization>) {
+    fun setup(organization: Collection<Organization>) {
         addAllOrganization(organization)
     }
 
@@ -98,7 +98,7 @@ object StorageOrganization : Storage {
      *
      * @return Latest unique identifier.
      */
-    fun getLastID(): Long {
+    internal fun getLastID(): Long {
         return getLastID(models = organizations.value)
     }
 

@@ -70,8 +70,12 @@ object StorageCollectionProject : Storage {
      *
      * @return Latest unique identifier.
      */
-    fun getLastID(): Long {
+    internal fun getLastID(): Long {
         return getLastID(models = collectionsProject.value)
+    }
+
+    internal fun getCollectionsProject(): MutableState<MutableList<CollectionProject>> {
+        return collectionsProject
     }
 
 }

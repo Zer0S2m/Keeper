@@ -66,7 +66,7 @@ object StorageProject : Storage {
         return projects
     }
 
-    internal fun setup(projects: Collection<Project>) {
+    fun setup(projects: Collection<Project>) {
         addAllProject(projects)
     }
 
@@ -105,7 +105,7 @@ object StorageProject : Storage {
      *
      * @return Latest unique identifier.
      */
-    fun getLastID(): Long {
+    internal fun getLastID(): Long {
         return getLastID(models = projects.value)
     }
 
