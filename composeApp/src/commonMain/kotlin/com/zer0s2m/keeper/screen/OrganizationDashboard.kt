@@ -89,15 +89,15 @@ private fun RightPanel() {
             .width(52.dp)
             .padding(PADDING)
     ) {
-        RightOrganizationPanel(
-            organizations = StorageOrganization.getAllOrganizations(),
-            modifier = Modifier.fillMaxWidth()
-        )
         ButtonAdd(
             modifier = Modifier.fillMaxWidth(),
             modifierButton = Modifier.height(40.dp),
             shape = RoundedCornerShape(SHAPE),
             onClick = { ActionOrganization.openModalCreateOrganizationPopup(true) }
+        )
+        RightOrganizationPanel(
+            organizations = StorageOrganization.getAllOrganizations(),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
