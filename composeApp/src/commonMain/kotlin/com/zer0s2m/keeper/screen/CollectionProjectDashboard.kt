@@ -15,8 +15,10 @@ import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.navigation.NavigationController
+import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.ui.BaseDashboard
 import com.zer0s2m.keeper.ui.ButtonAdd
+import com.zer0s2m.keeper.ui.ModalPopupCreateCollection
 import com.zer0s2m.keeper.ui.RightCollectionProjectPanel
 
 /**
@@ -33,6 +35,8 @@ class CollectionProjectDashboard(override val navigationController: NavigationCo
      */
     @Composable
     override fun render() {
+        ModalPopupCreateCollection(stateModal = StorageCollectionProject.expandedStateModalCreateCollectionPopup)
+
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,

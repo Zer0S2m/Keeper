@@ -20,12 +20,15 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
+import com.zer0s2m.keeper.actions.ActionCollectionProject
 import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
+import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
+import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.theme.md_theme_light_error
@@ -262,6 +265,88 @@ internal fun ModalPopupCreateProject(
                 }
                 BaseButtonModal(
                     onClick = { ActionProject.cancelCreateProject() },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = md_theme_light_error,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Cancel")
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Modal window - creating a collection.
+ *
+ * @param stateModal Modal window states.
+ */
+@Composable
+internal fun ModalPopupCreateCollection(
+    stateModal: MutableState<Boolean>
+) {
+    ModalPopup(
+        stateModal = stateModal,
+        modifierLayout = Modifier
+            .width(BASE_WIDTH_POPUP)
+            .height(BASE_HEIGHT_POPUP)
+    ) {
+        TitleModalPopup(text = "Creating a collection")
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            var text: String by remember { mutableStateOf("") }
+            var hasError: Boolean by remember { mutableStateOf(false) }
+            var label: String by remember { mutableStateOf("Title") }
+
+            TextField(
+                value = text,
+                isError = hasError,
+                label = {
+                    Text(text = label)
+                },
+                onValueChange = { value ->
+                    hasError = false
+                    text = value
+                    label = "Title"
+                },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                minLines = 1
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                BaseButtonModal(
+                    onClick = {
+                        val validation: Validator = NotEmptyValidator()
+                        if (!validation.validate(text)) {
+                            label = validation.msg
+                            hasError = true
+                        } else {
+                            ActionCollectionProject.openModalCreateCollectionProjectPopup(state = false)
+                            StorageProject.getCurrentProject()?.let {
+                                ActionCollectionProject.createCollectionProject(
+                                    collectionProject = CollectionProject(
+                                        StorageCollectionProject.getLastID() + 1,
+                                        it.id,
+                                        text.trim()
+                                    )
+                                )
+                            }
+                        }
+                    }
+                ) {
+                    Text("save")
+                }
+                BaseButtonModal(
+                    onClick = { ActionCollectionProject.cancelCreateProject() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = md_theme_light_error,
                         contentColor = Color.White

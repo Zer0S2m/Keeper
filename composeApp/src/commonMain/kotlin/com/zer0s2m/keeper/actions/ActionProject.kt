@@ -10,10 +10,23 @@ import com.zer0s2m.keeper.ui.ModalPopupCreateProject
  */
 object ActionProject : Action {
 
+    /**
+     * Open a modal window to create a project.
+     *
+     * @param state State of the modal window. `Active` or `inactive`
+     */
     internal fun openModalCreateProjectPopup(state: Boolean) {
         StorageProject.setExpandedStateModalCreateProjectPopup(value = state)
     }
 
+    /**
+     * Creating a new project. Includes:
+     *
+     * 1) Change the state of the modal window [ModalPopupCreateProject] to `inactive`.
+     * 2) Adding a new project to the repository [StorageProject].
+     *
+     * @param
+     */
     internal fun createProject(project: Project) {
         openModalCreateProjectPopup(false)
         StorageProject.addOrganization(project = project)
@@ -25,7 +38,7 @@ object ActionProject : Action {
      * 1) Change the state of the modal window [ModalPopupCreateProject] to `inactive`.
      */
     internal fun cancelCreateProject() {
-        StorageProject.setExpandedStateModalCreateProjectPopup(value = false)
+        openModalCreateProjectPopup(false)
     }
 
     /**

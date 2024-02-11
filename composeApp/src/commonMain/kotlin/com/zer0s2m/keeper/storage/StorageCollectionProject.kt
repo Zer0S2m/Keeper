@@ -3,6 +3,7 @@ package com.zer0s2m.keeper.storage
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.zer0s2m.keeper.dto.CollectionProject
+import com.zer0s2m.keeper.ui.ModalPopupCreateCollection
 
 /**
  * Basic storage for collections.
@@ -20,6 +21,11 @@ object StorageCollectionProject : Storage {
     private val collectionsProject: MutableState<MutableList<CollectionProject>> = mutableStateOf(mutableListOf())
 
     /**
+     * Current state of the modal [ModalPopupCreateCollection] when creating the organization.
+     */
+    internal val expandedStateModalCreateCollectionPopup: MutableState<Boolean> = mutableStateOf(false)
+
+    /**
      * Add collections.
      *
      * @param collectionsProject Collections.
@@ -35,6 +41,37 @@ object StorageCollectionProject : Storage {
 
     internal fun getAllCollectionsProjectByProjectID(projectID: Long): Collection<CollectionProject> {
         return collectionsProject.value.filter { it.projectID == projectID }
+    }
+
+    /**
+     * Add collection.
+     *
+     * @param collectionProject Collection.
+     */
+    internal fun addCollectionsProject(collectionProject: CollectionProject) {
+        val newCollectionsProject: MutableList<CollectionProject> = mutableListOf()
+        newCollectionsProject.addAll(collectionsProject.value)
+        newCollectionsProject.add(collectionProject)
+
+        collectionsProject.value = newCollectionsProject
+    }
+
+    /**
+     * Set the state of the modal window - creating a collection.
+     *
+     * @param value `Active` or `inactive`.
+     */
+    internal fun setExpandedStateModalCreateCollectionPopup(value: Boolean) {
+        expandedStateModalCreateCollectionPopup.value = value
+    }
+
+    /**
+     * Get the collection's latest unique identifier.
+     *
+     * @return Latest unique identifier.
+     */
+    fun getLastID(): Long {
+        return getLastID(models = collectionsProject.value)
     }
 
 }

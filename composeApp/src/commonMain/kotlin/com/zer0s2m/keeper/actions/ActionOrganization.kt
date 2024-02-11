@@ -12,12 +12,25 @@ import com.zer0s2m.keeper.ui.ModalPopupCreateOrganization
  */
 object ActionOrganization : Action {
 
+    /**
+     * Open a modal window to create an organization.
+     *
+     * @param state State of the modal window. `Active` or `inactive`
+     */
     internal fun openModalCreateOrganizationPopup(state: Boolean) {
         StorageOrganization.setExpandedStateModalCreateOrganizationPopup(state)
     }
 
+    /**
+     * Creation of an organization. Includes:
+     *
+     * 1) Change the state of the modal window [ModalPopupCreateOrganization] to `inactive`.
+     * 2) Adding a new organization to the repository [StorageOrganization].
+     *
+     * @param organization New organization.
+     */
     internal fun createOrganization(organization: Organization) {
-        openModalCreateOrganizationPopup(false)
+        openModalCreateOrganizationPopup(state = false)
         StorageOrganization.addOrganization(organization)
     }
 
@@ -27,7 +40,7 @@ object ActionOrganization : Action {
      * 1) Change the state of the modal window [ModalPopupCreateOrganization] to `inactive`.
      */
     internal fun cancelCreateOrganization() {
-        StorageOrganization.setExpandedStateModalCreateOrganizationPopup(false)
+        openModalCreateOrganizationPopup(state = false)
     }
 
     /**
