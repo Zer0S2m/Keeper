@@ -43,7 +43,8 @@ import com.zer0s2m.keeper.utils.formatTitleOrganization
  * Available actions:
  *
  * 1) When you click on a component, the organization will change.
- * 2) Deleting a organization via drop-down men.
+ * 2) Deleting an organization via drop-down men.
+ * 3) Editing an organization via a drop-down menu
  *
  * Contains:
  *
@@ -77,7 +78,11 @@ fun CardItemOrganization(organization: Organization) {
             expanded = expandedDropdownMenu,
             onClickDelete = { ActionOrganization.deleteOrganization(organizationID = organization.id) },
             onClickEdit = {
-                ActionOrganization.openModalCreateOrEditOrganizationPopup(state = true)
+                ActionOrganization.openModalCreateOrEditOrganizationPopup(
+                    state = true,
+                    isEdit = true,
+                    organization = organization
+                )
             }
         )
 
@@ -119,6 +124,7 @@ fun CardItemOrganization(organization: Organization) {
  *
  * 1) When you click on a component, the project will change
  * 2) Deleting a project via drop-down menu.
+ * 3) Editing a project via a drop-down menu.
  *
  * Contains:
  *

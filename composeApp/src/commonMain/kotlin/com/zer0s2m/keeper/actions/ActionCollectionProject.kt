@@ -23,7 +23,7 @@ object ActionCollectionProject : Action {
      *
      * 1) Change the state of the modal window [ModalPopupCreateCollection] to `inactive`.
      */
-    internal fun cancelCreateProject() {
+    internal fun cancelCreateOrEditProject() {
         openModalCreateCollectionProjectPopup(state = false)
     }
 

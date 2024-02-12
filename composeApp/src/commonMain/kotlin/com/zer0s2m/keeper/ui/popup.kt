@@ -29,7 +29,6 @@ import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.storage.StorageCollectionProject
-import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.theme.md_theme_light_error
 import com.zer0s2m.keeper.validation.NotEmptyValidator
@@ -117,27 +116,36 @@ internal fun ModalPopup(
 }
 
 /**
- * Modal window - creating an organization.
+ * Modal window - creating or editing an organization.
  *
+ * @param organization Initial organization.
  * @param stateModal Modal window states.
+ * @param stateModalIsEdit A sign that the project will be edited.
  */
 @Composable
-internal fun ModalPopupCreateOrganization(
-    stateModal: MutableState<Boolean>
+internal fun ModalPopupCreateOrEditOrganization(
+    organization: MutableState<Organization?>,
+    stateModal: MutableState<Boolean>,
+    stateModalIsEdit: MutableState<Boolean>
 ) {
+    if (organization.value == null) {
+        return
+    }
+
     ModalPopup(
         stateModal = stateModal,
         modifierLayout = Modifier
             .width(BASE_WIDTH_POPUP)
             .height(BASE_HEIGHT_POPUP)
     ) {
-        TitleModalPopup(text = "Creation of an organization")
+        TitleModalPopup(text = if (!stateModalIsEdit.value)
+            "Creation of an organization" else "Edition of an organization")
 
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            var text: String by remember { mutableStateOf("") }
+            var text: String by remember { mutableStateOf(organization.value!!.title) }
             var hasError: Boolean by remember { mutableStateOf(false) }
             var label: String by remember { mutableStateOf("Title") }
 
@@ -169,12 +177,26 @@ internal fun ModalPopupCreateOrganization(
                             label = validation.msg
                             hasError = true
                         } else {
-                            ActionOrganization.openModalCreateOrEditOrganizationPopup(false)
-                            ActionOrganization.createOrganization(
-                                Organization(
-                                    StorageOrganization.getLastID() + 1,
-                                    text.trim()
+                            if (!stateModalIsEdit.value) {
+                                ActionOrganization.createOrganization(
+                                    Organization(
+                                        organization.value!!.id,
+                                        text.trim()
+                                    )
                                 )
+                            } else {
+                                ActionOrganization.editOrganization(
+                                    Organization(
+                                        organization.value!!.id,
+                                        text.trim()
+                                    )
+                                )
+                            }
+
+                            ActionOrganization.openModalCreateOrEditOrganizationPopup(
+                                state = false,
+                                isEdit = false,
+                                organization = null
                             )
                         }
                     }
@@ -182,7 +204,7 @@ internal fun ModalPopupCreateOrganization(
                     Text("save")
                 }
                 BaseButtonModal(
-                    onClick = { ActionOrganization.cancelCreateOrganization() },
+                    onClick = { ActionOrganization.cancelCreateOrEditOrganization() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = md_theme_light_error,
                         contentColor = Color.White
@@ -281,7 +303,7 @@ internal fun ModalPopupCreateOrEditProject(
                     Text("save")
                 }
                 BaseButtonModal(
-                    onClick = { ActionProject.cancelCreateProject() },
+                    onClick = { ActionProject.cancelCreateOrEditProject() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = md_theme_light_error,
                         contentColor = Color.White
@@ -363,7 +385,7 @@ internal fun ModalPopupCreateCollection(
                     Text("save")
                 }
                 BaseButtonModal(
-                    onClick = { ActionCollectionProject.cancelCreateProject() },
+                    onClick = { ActionCollectionProject.cancelCreateOrEditProject() },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = md_theme_light_error,
                         contentColor = Color.White

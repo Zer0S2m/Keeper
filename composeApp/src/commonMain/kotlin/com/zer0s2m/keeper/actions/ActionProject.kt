@@ -29,7 +29,7 @@ object ActionProject : Action {
      *
      * 1) Change the state of the modal window [ModalPopupCreateOrEditProject] to `inactive`.
      * 2) Adding a new project to the repository [StorageProject].
-     * 3) Sets the original project [StorageProject.StorageProjectStateModal.initialProjectStateModal] to `null`
+     * 3) Sets the original project [StorageProject.StorageProjectStateModal.initialProjectStateModal] to `null`.
      *
      * @param project Project to add to repository.
      */
@@ -57,7 +57,7 @@ object ActionProject : Action {
      *
      * 1) Change the state of the modal window [ModalPopupCreateOrEditProject] to `inactive`.
      */
-    internal fun cancelCreateProject() {
+    internal fun cancelCreateOrEditProject() {
         openModalCreateOrEditProjectPopup(state = false, isEdit = false, project = null)
     }
 

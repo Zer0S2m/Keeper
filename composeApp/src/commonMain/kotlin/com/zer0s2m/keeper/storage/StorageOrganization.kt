@@ -3,7 +3,7 @@ package com.zer0s2m.keeper.storage
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.zer0s2m.keeper.dto.Organization
-import com.zer0s2m.keeper.ui.ModalPopupCreateOrganization
+import com.zer0s2m.keeper.ui.ModalPopupCreateOrEditOrganization
 
 /**
  * Basic storage for organizations.
@@ -20,10 +20,51 @@ object StorageOrganization : Storage {
      */
     private val organizations: MutableState<MutableList<Organization>> = mutableStateOf(mutableListOf())
 
-    /**
-     * Current state of the modal [ModalPopupCreateOrganization] when creating the organization.
-     */
-    internal val expandedStateModalCreateOrganizationPopup: MutableState<Boolean> = mutableStateOf(false)
+    object StorageOrganizationStateModal : Storage {
+
+        /**
+         * Current state of the modal [ModalPopupCreateOrEditOrganization] when creating the organization.
+         */
+        internal val expandedStateModalCreateOrganizationPopup: MutableState<Boolean> = mutableStateOf(false)
+
+        /**
+         * State of the modal window, either creating a project or editing it.
+         */
+        internal val isEditStateModalCreateOrEditOrganizationPopup: MutableState<Boolean> = mutableStateOf(false)
+
+        /**
+         * The initial object for editing and creating an organization.
+         */
+        internal val initialOrganizationStateModal: MutableState<Organization?> = mutableStateOf(null)
+
+        /**
+         * Set the state of the modal window - creating an organization.
+         *
+         * @param value `Active` or `inactive`.
+         */
+        internal fun setExpandedStateModalCreateOrganizationPopup(value: Boolean) {
+            expandedStateModalCreateOrganizationPopup.value = value
+        }
+
+        /**
+         * Set the state of the modal window, either creating an organization or editing it.
+         *
+         * @param value `Create` or `Edit`.
+         */
+        internal fun setIsEditStateModalCreateOrEditOrganizationPopup(value: Boolean) {
+            isEditStateModalCreateOrEditOrganizationPopup.value = value
+        }
+
+        /**
+         * Set up initial organization.
+         *
+         * @param organization Initial organization.
+         */
+        internal fun setInitialOrganizationStateModal(organization: Organization?) {
+            initialOrganizationStateModal.value = organization
+        }
+
+    }
 
     /**
      * Get the current active organization.
@@ -76,12 +117,25 @@ object StorageOrganization : Storage {
     }
 
     /**
-     * Set the state of the modal window - creating an organization.
+     * Install the organization into the repository.
      *
-     * @param value `Active` or `inactive`.
+     * @param organization Organization.
      */
-    internal fun setExpandedStateModalCreateOrganizationPopup(value: Boolean) {
-        expandedStateModalCreateOrganizationPopup.value = value
+    internal fun setOrganization(organization: Organization) {
+        val newOrganizations: MutableList<Organization> = this.organizations.value.toMutableList()
+        var indexSetting: Int = -1
+
+        newOrganizations.forEachIndexed { index, newOrganization ->
+            if (newOrganization.id == organization.id) {
+                indexSetting = index
+            }
+        }
+
+        if (indexSetting != -1) {
+            newOrganizations[indexSetting] = organization
+        }
+
+        this.organizations.value = newOrganizations
     }
 
     /**

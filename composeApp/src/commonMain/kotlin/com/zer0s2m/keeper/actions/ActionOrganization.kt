@@ -5,7 +5,7 @@ import com.zer0s2m.keeper.screen.OrganizationDashboard
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.storage.StorageState
-import com.zer0s2m.keeper.ui.ModalPopupCreateOrganization
+import com.zer0s2m.keeper.ui.ModalPopupCreateOrEditOrganization
 
 /**
  * Action repository - organizations.
@@ -16,31 +16,55 @@ object ActionOrganization : Action {
      * Open a modal window to create an organization.
      *
      * @param state State of the modal window. `Active` or `inactive`
+     * @param isEdit `Create` or `Edit`.
+     * @param organization Initial organization.
      */
-    internal fun openModalCreateOrEditOrganizationPopup(state: Boolean) {
-        StorageOrganization.setExpandedStateModalCreateOrganizationPopup(state)
+    internal fun openModalCreateOrEditOrganizationPopup(state: Boolean, isEdit: Boolean, organization: Organization?) {
+        StorageOrganization.StorageOrganizationStateModal
+            .setExpandedStateModalCreateOrganizationPopup(value = state)
+        StorageOrganization.StorageOrganizationStateModal
+            .setIsEditStateModalCreateOrEditOrganizationPopup(value = isEdit)
+        StorageOrganization.StorageOrganizationStateModal
+            .setInitialOrganizationStateModal(organization = organization)
     }
 
     /**
      * Creation of an organization. Includes:
      *
-     * 1) Change the state of the modal window [ModalPopupCreateOrganization] to `inactive`.
+     * 1) Change the state of the modal window [ModalPopupCreateOrEditOrganization] to `inactive`.
      * 2) Adding a new organization to the repository [StorageOrganization].
+     * 3) Sets the original organization
+     * [StorageOrganization.StorageOrganizationStateModal.initialOrganizationStateModal] to `null`.
      *
      * @param organization New organization.
      */
     internal fun createOrganization(organization: Organization) {
-        openModalCreateOrEditOrganizationPopup(state = false)
+        openModalCreateOrEditOrganizationPopup(state = false, isEdit = false, organization = null)
         StorageOrganization.addOrganization(organization)
+    }
+
+    /**
+     * Editing of an organization. Includes:
+     *
+     * 1) Change the state of the modal window [ModalPopupCreateOrEditOrganization] to `inactive`.
+     * 2) Setting an edited organization to the repository [StorageOrganization].
+     * 3) Sets the original organization
+     * [StorageOrganization.StorageOrganizationStateModal.initialOrganizationStateModal] to `null`.
+     *
+     * @param organization New organization.
+     */
+    internal fun editOrganization(organization: Organization) {
+        openModalCreateOrEditOrganizationPopup(state = false, isEdit = false, organization = null)
+        StorageOrganization.setOrganization(organization)
     }
 
     /**
      * Cancel the creation of an organization. Following steps when canceling:
      *
-     * 1) Change the state of the modal window [ModalPopupCreateOrganization] to `inactive`.
+     * 1) Change the state of the modal window [ModalPopupCreateOrEditOrganization] to `inactive`.
      */
-    internal fun cancelCreateOrganization() {
-        openModalCreateOrEditOrganizationPopup(state = false)
+    internal fun cancelCreateOrEditOrganization() {
+        openModalCreateOrEditOrganizationPopup(state = false, isEdit = false, organization = null)
     }
 
     /**

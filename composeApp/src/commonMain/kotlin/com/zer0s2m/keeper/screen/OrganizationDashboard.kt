@@ -12,6 +12,7 @@ import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
+import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageOrganization
@@ -30,7 +31,14 @@ class OrganizationDashboard(override val navigationController: NavigationControl
      */
     @Composable
     override fun render() {
-        ModalPopupCreateOrganization(stateModal = StorageOrganization.expandedStateModalCreateOrganizationPopup)
+        ModalPopupCreateOrEditOrganization(
+            organization = StorageOrganization
+                .StorageOrganizationStateModal.initialOrganizationStateModal,
+            stateModal = StorageOrganization
+                .StorageOrganizationStateModal.expandedStateModalCreateOrganizationPopup,
+            stateModalIsEdit = StorageOrganization
+                .StorageOrganizationStateModal.isEditStateModalCreateOrEditOrganizationPopup,
+        )
 
         Column {
             Column(
@@ -94,7 +102,16 @@ private fun RightPanel() {
             modifier = Modifier.fillMaxWidth(),
             modifierButton = Modifier.height(40.dp),
             shape = RoundedCornerShape(SHAPE),
-            onClick = { ActionOrganization.openModalCreateOrEditOrganizationPopup(true) }
+            onClick = {
+                ActionOrganization.openModalCreateOrEditOrganizationPopup(
+                    state = true,
+                    isEdit = false,
+                    organization = Organization(
+                        StorageOrganization.getLastID() + 1,
+                        ""
+                    )
+                )
+            }
         )
         RightOrganizationPanel(
             organizations = StorageOrganization.getAllOrganizations(),
@@ -152,8 +169,10 @@ private fun PanelCollectionsProject(navigationController: NavigationController) 
                     .padding(PADDING * 2)
             ) {
                 CollectionProjectDashboard(navigationController = navigationController)
-                    .setProjects(StorageCollectionProject
-                        .getAllCollectionsProjectByProjectID(it.id))
+                    .setProjects(
+                        StorageCollectionProject
+                            .getAllCollectionsProjectByProjectID(it.id)
+                    )
                     .render()
             }
         }
