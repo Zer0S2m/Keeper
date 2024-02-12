@@ -42,22 +42,42 @@ import com.zer0s2m.keeper.utils.formatTitleOrganization
  *
  * Available actions:
  *
- * 1) When you click on a component, the organization will change
+ * 1) When you click on a component, the organization will change.
+ * 2) Deleting a organization via drop-down men.
+ *
+ * Contains:
+ *
+ * 1) Drop-down menu for organization management
  *
  * @param organization Organization for drawing.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 fun CardItemOrganization(organization: Organization) {
+    val expandedDropdownMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .semantics { role = Role.Button }
             .fillMaxWidth()
+            .onPointerEvent(
+                eventType = PointerEventType.Press,
+                pass = PointerEventPass.Final,
+            ) { event ->
+                if (event.button?.isSecondary == true) {
+                    expandedDropdownMenu.value = true
+                }
+            }
             .pointerHoverIcon(icon = PointerIcon.Hand),
         shape = RoundedCornerShape(SHAPE),
         interactionSource = remember { MutableInteractionSource() },
         onClick = { ActionOrganization.changeOrganization(organization) }
     ) {
+        MenuDropdownOrganization(
+            expanded = expandedDropdownMenu,
+            onClickDelete = { ActionOrganization.deleteOrganization(organizationID = organization.id) }
+        )
+
         Row(modifier = Modifier.fillMaxSize()) {
             var offsetX: Dp = 0.dp
             if (organization == StorageOrganization.getCurrentOrganization()) {

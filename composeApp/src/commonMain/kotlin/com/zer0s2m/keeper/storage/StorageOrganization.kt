@@ -71,7 +71,7 @@ object StorageOrganization : Storage {
      *
      * @param organization Organization.
      */
-    internal fun setCurrentOrganization(organization: Organization) {
+    internal fun setCurrentOrganization(organization: Organization?) {
         currentOrganization.value = organization
     }
 
@@ -100,6 +100,17 @@ object StorageOrganization : Storage {
      */
     internal fun getLastID(): Long {
         return getLastID(models = organizations.value)
+    }
+
+    /**
+     * Deletes a organization by unique identifier.
+     *
+     * @param organizationID Unique identification.
+     */
+    internal fun removeOrganization(organizationID: Long) {
+        organizations.value = organizations.value.filter { organization: Organization ->
+            organization.id != organizationID
+        }.toMutableList()
     }
 
 }

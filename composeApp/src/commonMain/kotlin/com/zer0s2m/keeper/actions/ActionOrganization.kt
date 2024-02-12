@@ -57,4 +57,28 @@ object ActionOrganization : Action {
         StorageState.setCurrentProjectID(projectID = null)
     }
 
+    /**
+     * Deleting an organization. Includes:
+     *
+     * 1) Delete an organization
+     * 2) Deleting all projects included in the organization
+     * 3) Deleting all collections included in remote projects
+     * 4) Sets the active organization to null if it matches the deleted organization
+     *
+     * @param organizationID
+     */
+    internal fun deleteOrganization(organizationID: Long) {
+        StorageOrganization.getCurrentOrganization()?.let {
+            if (it.id == organizationID) {
+                StorageOrganization.setCurrentOrganization(organization = null)
+            }
+        }
+
+        StorageProject.getAllProjectByOrganizationID(organizationID = organizationID).forEach {
+            ActionProject.deleteProject(projectID = it.id)
+        }
+
+        StorageOrganization.removeOrganization(organizationID = organizationID)
+    }
+
 }
