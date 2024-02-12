@@ -169,7 +169,7 @@ internal fun ModalPopupCreateOrganization(
                             label = validation.msg
                             hasError = true
                         } else {
-                            ActionOrganization.openModalCreateOrganizationPopup(false)
+                            ActionOrganization.openModalCreateOrEditOrganizationPopup(false)
                             ActionOrganization.createOrganization(
                                 Organization(
                                     StorageOrganization.getLastID() + 1,
@@ -196,27 +196,35 @@ internal fun ModalPopupCreateOrganization(
 }
 
 /**
- * Modal window - creating a project.
+ * Modal window - creating or editing a project.
  *
+ * @param project Initial project.
  * @param stateModal Modal window states.
+ * @param stateModalIsEdit A sign that the project will be edited.
  */
 @Composable
-internal fun ModalPopupCreateProject(
-    stateModal: MutableState<Boolean>
+internal fun ModalPopupCreateOrEditProject(
+    project: MutableState<Project?>,
+    stateModal: MutableState<Boolean>,
+    stateModalIsEdit: MutableState<Boolean>
 ) {
+    if (project.value == null) {
+        return
+    }
+
     ModalPopup(
         stateModal = stateModal,
         modifierLayout = Modifier
             .width(BASE_WIDTH_POPUP)
             .height(BASE_HEIGHT_POPUP)
     ) {
-        TitleModalPopup(text = "Creating a project")
+        TitleModalPopup(text = if (stateModalIsEdit.value) "Editing a project" else "Creating a project")
 
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            var text: String by remember { mutableStateOf("") }
+            var text: String by remember { mutableStateOf(project.value!!.title) }
             var hasError: Boolean by remember { mutableStateOf(false) }
             var label: String by remember { mutableStateOf("Title") }
 
@@ -248,16 +256,25 @@ internal fun ModalPopupCreateProject(
                             label = validation.msg
                             hasError = true
                         } else {
-                            ActionProject.openModalCreateProjectPopup(false)
-                            StorageOrganization.getCurrentOrganization()?.let {
+                            if (!stateModalIsEdit.value) {
                                 ActionProject.createProject(
                                     Project(
-                                        StorageProject.getLastID() + 1,
-                                        it.id,
+                                        project.value!!.id,
+                                        project.value!!.organizationID,
+                                        text.trim()
+                                    )
+                                )
+                            } else {
+                                ActionProject.editProject(
+                                    Project(
+                                        project.value!!.id,
+                                        project.value!!.organizationID,
                                         text.trim()
                                     )
                                 )
                             }
+
+                            ActionProject.openModalCreateOrEditProjectPopup(state = false, isEdit = false, null)
                         }
                     }
                 ) {

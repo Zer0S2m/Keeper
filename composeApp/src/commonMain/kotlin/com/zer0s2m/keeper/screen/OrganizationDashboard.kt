@@ -94,7 +94,7 @@ private fun RightPanel() {
             modifier = Modifier.fillMaxWidth(),
             modifierButton = Modifier.height(40.dp),
             shape = RoundedCornerShape(SHAPE),
-            onClick = { ActionOrganization.openModalCreateOrganizationPopup(true) }
+            onClick = { ActionOrganization.openModalCreateOrEditOrganizationPopup(true) }
         )
         RightOrganizationPanel(
             organizations = StorageOrganization.getAllOrganizations(),

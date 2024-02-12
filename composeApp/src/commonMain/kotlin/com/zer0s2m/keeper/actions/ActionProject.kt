@@ -4,7 +4,7 @@ import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.storage.StorageState
-import com.zer0s2m.keeper.ui.ModalPopupCreateProject
+import com.zer0s2m.keeper.ui.ModalPopupCreateOrEditProject
 
 /**
  * Action repository - projects.
@@ -12,34 +12,53 @@ import com.zer0s2m.keeper.ui.ModalPopupCreateProject
 object ActionProject : Action {
 
     /**
-     * Open a modal window to create a project.
+     * Open a modal window to create or edit a project.
      *
-     * @param state State of the modal window. `Active` or `inactive`
+     * @param state State of the modal window. `Active` or `inactive`.
+     * @param isEdit `Create` or `Edit`.
+     * @param project Initial project.
      */
-    internal fun openModalCreateProjectPopup(state: Boolean) {
-        StorageProject.setExpandedStateModalCreateProjectPopup(value = state)
+    internal fun openModalCreateOrEditProjectPopup(state: Boolean, isEdit: Boolean, project: Project?) {
+        StorageProject.StorageProjectStateModal.setExpandedStateModalCreateOrEditProjectPopup(value = state)
+        StorageProject.StorageProjectStateModal.setIsEditStateModalCreateOrEditProjectPopup(value = isEdit)
+        StorageProject.StorageProjectStateModal.setInitialProjectStateModal(project = project)
     }
 
     /**
      * Creating a new project. Includes:
      *
-     * 1) Change the state of the modal window [ModalPopupCreateProject] to `inactive`.
+     * 1) Change the state of the modal window [ModalPopupCreateOrEditProject] to `inactive`.
      * 2) Adding a new project to the repository [StorageProject].
+     * 3) Sets the original project [StorageProject.StorageProjectStateModal.initialProjectStateModal] to `null`
      *
-     * @param
+     * @param project Project to add to repository.
      */
     internal fun createProject(project: Project) {
-        openModalCreateProjectPopup(false)
-        StorageProject.addOrganization(project = project)
+        openModalCreateOrEditProjectPopup(state = false, isEdit = false, project = null)
+        StorageProject.addProject(project = project)
+    }
+
+    /**
+     * Editing a project. Includes:
+     *
+     * 1) Change the state of the modal window [ModalPopupCreateOrEditProject] to `inactive`.
+     * 2) Settings an edited project to the repository [StorageProject].
+     * 3) Sets the original project [StorageProject.StorageProjectStateModal.initialProjectStateModal] to `null`
+     *
+     * @param project Replacement project in the repository.
+     */
+    internal fun editProject(project: Project) {
+        openModalCreateOrEditProjectPopup(state = false, isEdit = false, project = null)
+        StorageProject.setProject(project = project)
     }
 
     /**
      * Cancel the creation the project. Following steps when canceling:
      *
-     * 1) Change the state of the modal window [ModalPopupCreateProject] to `inactive`.
+     * 1) Change the state of the modal window [ModalPopupCreateOrEditProject] to `inactive`.
      */
     internal fun cancelCreateProject() {
-        openModalCreateProjectPopup(false)
+        openModalCreateOrEditProjectPopup(state = false, isEdit = false, project = null)
     }
 
     /**
@@ -49,7 +68,6 @@ object ActionProject : Action {
      */
     internal fun changeProject(project: Project) {
         StorageProject.setCurrentProject(project = project)
-
         StorageState.setCurrentProjectID(projectID = project.id)
     }
 

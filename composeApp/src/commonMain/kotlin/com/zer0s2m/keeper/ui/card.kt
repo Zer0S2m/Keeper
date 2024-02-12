@@ -75,7 +75,10 @@ fun CardItemOrganization(organization: Organization) {
     ) {
         MenuDropdownOrganization(
             expanded = expandedDropdownMenu,
-            onClickDelete = { ActionOrganization.deleteOrganization(organizationID = organization.id) }
+            onClickDelete = { ActionOrganization.deleteOrganization(organizationID = organization.id) },
+            onClickEdit = {
+                ActionOrganization.openModalCreateOrEditOrganizationPopup(state = true)
+            }
         )
 
         Row(modifier = Modifier.fillMaxSize()) {
@@ -148,7 +151,18 @@ fun CardItemProject(project: Project) {
         MenuDropdownProject(
             modifier = Modifier.width(WIDTH_RIGHT_PANEL - (PADDING * 4)),
             expanded = expandedDropdownMenu,
-            onClickDelete = { ActionProject.deleteProject(projectID = project.id) }
+            onClickDelete = { ActionProject.deleteProject(projectID = project.id) },
+            onClickEdit = {
+                ActionProject.openModalCreateOrEditProjectPopup(
+                    state = true,
+                    isEdit = true,
+                    project = Project(
+                        project.id,
+                        project.organizationID,
+                        project.title
+                    )
+                )
+            }
         )
 
         Row(modifier = Modifier.fillMaxSize()) {

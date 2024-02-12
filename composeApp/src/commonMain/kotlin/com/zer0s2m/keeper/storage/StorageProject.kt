@@ -3,7 +3,7 @@ package com.zer0s2m.keeper.storage
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.zer0s2m.keeper.dto.Project
-import com.zer0s2m.keeper.ui.ModalPopupCreateProject
+import com.zer0s2m.keeper.ui.ModalPopupCreateOrEditProject
 
 /**
  * Basic storage for projects.
@@ -20,10 +20,51 @@ object StorageProject : Storage {
      */
     private val projects: MutableState<MutableList<Project>> = mutableStateOf(mutableListOf())
 
-    /**
-     * Current state of the modal [ModalPopupCreateProject] when creating the organization.
-     */
-    internal val expandedStateModalCreateProjectPopup: MutableState<Boolean> = mutableStateOf(false)
+    object StorageProjectStateModal : Storage {
+
+        /**
+         * Current state of the modal [ModalPopupCreateOrEditProject] when creating the organization.
+         */
+        internal val expandedStateModalCreateOrEditProjectPopup: MutableState<Boolean> = mutableStateOf(false)
+
+        /**
+         * State of the modal window, either creating a project or editing it.
+         */
+        internal val isEditStateModalCreateOrEditProjectPopup: MutableState<Boolean> = mutableStateOf(false)
+
+        /**
+         * The initial object for editing and creating a project.
+         */
+        internal val initialProjectStateModal: MutableState<Project?> = mutableStateOf(null)
+
+        /**
+         * Set the state of the modal window - creating a project.
+         *
+         * @param value `Active` or `inactive`.
+         */
+        internal fun setExpandedStateModalCreateOrEditProjectPopup(value: Boolean) {
+            expandedStateModalCreateOrEditProjectPopup.value = value
+        }
+
+        /**
+         * Set the state of the modal window, either creating a project or editing it.
+         *
+         * @param value `Create` or `Edit`.
+         */
+        internal fun setIsEditStateModalCreateOrEditProjectPopup(value: Boolean) {
+            isEditStateModalCreateOrEditProjectPopup.value = value
+        }
+
+        /**
+         * Set up initial project.
+         *
+         * @param project Initial project
+         */
+        internal fun setInitialProjectStateModal(project: Project?) {
+            initialProjectStateModal.value = project
+        }
+
+    }
 
     /**
      * Get the currently active project.
@@ -49,10 +90,32 @@ object StorageProject : Storage {
      *
      * @param project Project.
      */
-    internal fun addOrganization(project: Project) {
+    internal fun addProject(project: Project) {
         val newProjects: MutableList<Project> = mutableListOf()
         newProjects.addAll(projects.value)
         newProjects.add(project)
+
+        this.projects.value = newProjects
+    }
+
+    /**
+     * Install the project into the repository.
+     *
+     * @param project Project.
+     */
+    internal fun setProject(project: Project) {
+        val newProjects: MutableList<Project> = this.projects.value.toMutableList()
+        var indexSetting: Int = -1
+
+        newProjects.forEachIndexed { index, newProject ->
+            if (newProject.id == project.id) {
+                indexSetting = index
+            }
+        }
+
+        if (indexSetting != -1) {
+            newProjects[indexSetting] = project
+        }
 
         this.projects.value = newProjects
     }
@@ -77,15 +140,6 @@ object StorageProject : Storage {
      */
     internal fun setCurrentProject(project: Project?) {
         currentProject.value = project
-    }
-
-    /**
-     * Set the state of the modal window - creating a project.
-     *
-     * @param value `Active` or `inactive`.
-     */
-    internal fun setExpandedStateModalCreateProjectPopup(value: Boolean) {
-        expandedStateModalCreateProjectPopup.value = value
     }
 
     /**

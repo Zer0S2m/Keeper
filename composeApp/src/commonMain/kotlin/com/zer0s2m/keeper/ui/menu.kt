@@ -26,7 +26,8 @@ import com.zer0s2m.keeper.enum.Icon
 fun MenuDropdownProject(
     expanded: MutableState<Boolean>,
     modifier: Modifier = Modifier,
-    onClickDelete: () -> Unit
+    onClickDelete: () -> Unit,
+    onClickEdit: () -> Unit
 ) {
     DropdownMenu(
         expanded = expanded.value,
@@ -36,6 +37,10 @@ fun MenuDropdownProject(
         DropdownMenuItemActionDelete(
             expanded = expanded,
             onClick = onClickDelete
+        )
+        DropdownMenuItemActionEdit(
+            expanded = expanded,
+            onClick = onClickEdit
         )
     }
 }
@@ -51,7 +56,8 @@ fun MenuDropdownProject(
 fun MenuDropdownOrganization(
     expanded: MutableState<Boolean>,
     modifier: Modifier = Modifier,
-    onClickDelete: () -> Unit
+    onClickDelete: () -> Unit,
+    onClickEdit: () -> Unit
 ) {
     DropdownMenu(
         expanded = expanded.value,
@@ -61,6 +67,10 @@ fun MenuDropdownOrganization(
         DropdownMenuItemActionDelete(
             expanded = expanded,
             onClick = onClickDelete
+        )
+        DropdownMenuItemActionEdit(
+            expanded = expanded,
+            onClick = onClickEdit
         )
     }
 }
@@ -89,6 +99,34 @@ private fun DropdownMenuItemActionDelete(
                 )
             }
             Text("Delete")
+        }
+    }
+}
+
+@Composable
+private fun DropdownMenuItemActionEdit(
+    expanded: MutableState<Boolean>,
+    onClick: () -> Unit
+) {
+    DropdownMenuItem(
+        modifier = Modifier.pointerHoverIcon(icon = PointerIcon.Hand),
+        onClick = {
+            expanded.value = false
+            onClick()
+        }
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.padding(end = PADDING * 3)) {
+                Image(
+                    painter = painterResource(resourcePath = Icon.ICON_PENCIL.path),
+                    contentDescription = "Edit icon"
+                )
+            }
+            Text("Edit")
         }
     }
 }

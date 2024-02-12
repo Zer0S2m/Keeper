@@ -15,10 +15,11 @@ import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.navigation.NavigationController
+import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.ui.BaseDashboard
 import com.zer0s2m.keeper.ui.ButtonAdd
-import com.zer0s2m.keeper.ui.ModalPopupCreateProject
+import com.zer0s2m.keeper.ui.ModalPopupCreateOrEditProject
 import com.zer0s2m.keeper.ui.RightProjectsPanel
 
 /**
@@ -35,7 +36,11 @@ class ProjectDashboard(override val navigationController: NavigationController) 
      */
     @Composable
     override fun render() {
-        ModalPopupCreateProject(stateModal = StorageProject.expandedStateModalCreateProjectPopup)
+        ModalPopupCreateOrEditProject(
+            project = StorageProject.StorageProjectStateModal.initialProjectStateModal,
+            stateModal = StorageProject.StorageProjectStateModal.expandedStateModalCreateOrEditProjectPopup,
+            stateModalIsEdit = StorageProject.StorageProjectStateModal.isEditStateModalCreateOrEditProjectPopup
+        )
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -58,7 +63,19 @@ class ProjectDashboard(override val navigationController: NavigationController) 
                     .height(20.dp)
                     .width(28.dp),
                 shape = RoundedCornerShape(SHAPE),
-                onClick = { ActionProject.openModalCreateProjectPopup(true) }
+                onClick = {
+                    ActionProject.openModalCreateOrEditProjectPopup(
+                        state = true,
+                        isEdit = false,
+                        project = StorageOrganization.getCurrentOrganization()?.id?.let { organizationID ->
+                            Project(
+                                StorageProject.getLastID() + 1,
+                                organizationID,
+                                ""
+                            )
+                        }
+                    )
+                }
             )
         }
         RightProjectsPanel(projects)

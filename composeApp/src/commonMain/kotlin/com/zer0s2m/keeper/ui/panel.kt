@@ -83,7 +83,10 @@ fun RightProjectsPanel(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        items(projects.value) { project ->
+        items(
+            items = projects.value,
+            key = { it.id }
+        ) { project ->
             CardItemProject(project = project)
         }
     }

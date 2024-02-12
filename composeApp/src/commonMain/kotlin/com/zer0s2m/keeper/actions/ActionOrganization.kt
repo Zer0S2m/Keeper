@@ -17,7 +17,7 @@ object ActionOrganization : Action {
      *
      * @param state State of the modal window. `Active` or `inactive`
      */
-    internal fun openModalCreateOrganizationPopup(state: Boolean) {
+    internal fun openModalCreateOrEditOrganizationPopup(state: Boolean) {
         StorageOrganization.setExpandedStateModalCreateOrganizationPopup(state)
     }
 
@@ -30,7 +30,7 @@ object ActionOrganization : Action {
      * @param organization New organization.
      */
     internal fun createOrganization(organization: Organization) {
-        openModalCreateOrganizationPopup(state = false)
+        openModalCreateOrEditOrganizationPopup(state = false)
         StorageOrganization.addOrganization(organization)
     }
 
@@ -40,7 +40,7 @@ object ActionOrganization : Action {
      * 1) Change the state of the modal window [ModalPopupCreateOrganization] to `inactive`.
      */
     internal fun cancelCreateOrganization() {
-        openModalCreateOrganizationPopup(state = false)
+        openModalCreateOrEditOrganizationPopup(state = false)
     }
 
     /**
