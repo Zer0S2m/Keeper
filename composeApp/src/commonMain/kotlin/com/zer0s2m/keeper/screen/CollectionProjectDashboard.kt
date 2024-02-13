@@ -16,9 +16,10 @@ import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageCollectionProject
+import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.ui.BaseDashboard
 import com.zer0s2m.keeper.ui.ButtonAdd
-import com.zer0s2m.keeper.ui.ModalPopupCreateCollection
+import com.zer0s2m.keeper.ui.ModalPopupCreateOrEditCollection
 import com.zer0s2m.keeper.ui.RightCollectionProjectPanel
 
 /**
@@ -35,7 +36,17 @@ class CollectionProjectDashboard(override val navigationController: NavigationCo
      */
     @Composable
     override fun render() {
-        ModalPopupCreateCollection(stateModal = StorageCollectionProject.expandedStateModalCreateCollectionPopup)
+        ModalPopupCreateOrEditCollection(
+            collectionProject = StorageCollectionProject
+                .StorageCollectionProjectStateModal
+                .initialCollectionProjectStateModal,
+            stateModal = StorageCollectionProject
+                .StorageCollectionProjectStateModal
+                .expandedStateModalCreateOrEditCollectionPopup,
+            stateModalIsEdit = StorageCollectionProject
+                .StorageCollectionProjectStateModal
+                .isEditStateModalCreateOrEditCollectionPopup
+        )
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -57,7 +68,19 @@ class CollectionProjectDashboard(override val navigationController: NavigationCo
                     .height(20.dp)
                     .width(28.dp),
                 shape = RoundedCornerShape(SHAPE),
-                onClick = { ActionCollectionProject.openModalCreateCollectionProjectPopup(true) }
+                onClick = {
+                    ActionCollectionProject.openModalCreateOrEditCollectionProjectPopup(
+                        state = true,
+                        isEdit = false,
+                        collectionProject = StorageProject.getCurrentProject()?.let {
+                            CollectionProject(
+                                id = StorageCollectionProject.getLastID() + 1,
+                                title = "",
+                                projectID = it.id
+                            )
+                        }
+                    )
+                }
             )
         }
 

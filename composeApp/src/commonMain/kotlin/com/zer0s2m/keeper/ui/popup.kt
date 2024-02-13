@@ -28,8 +28,6 @@ import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
-import com.zer0s2m.keeper.storage.StorageCollectionProject
-import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.theme.md_theme_light_error
 import com.zer0s2m.keeper.validation.NotEmptyValidator
 import com.zer0s2m.keeper.validation.Validator
@@ -317,27 +315,35 @@ internal fun ModalPopupCreateOrEditProject(
 }
 
 /**
- * Modal window - creating a collection.
+ * Modal window - creating or editing a collection.
  *
+ * @param collectionProject Initial collection.
  * @param stateModal Modal window states.
+ * @param stateModalIsEdit A sign that the project will be edited.
  */
 @Composable
-internal fun ModalPopupCreateCollection(
-    stateModal: MutableState<Boolean>
+internal fun ModalPopupCreateOrEditCollection(
+    collectionProject: MutableState<CollectionProject?>,
+    stateModal: MutableState<Boolean>,
+    stateModalIsEdit: MutableState<Boolean>
 ) {
+    if (collectionProject.value == null) {
+        return
+    }
+
     ModalPopup(
         stateModal = stateModal,
         modifierLayout = Modifier
             .width(BASE_WIDTH_POPUP)
             .height(BASE_HEIGHT_POPUP)
     ) {
-        TitleModalPopup(text = "Creating a collection")
+        TitleModalPopup(text = if (stateModalIsEdit.value) "Editing a collection" else "Creating a collection")
 
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            var text: String by remember { mutableStateOf("") }
+            var text: String by remember { mutableStateOf(collectionProject.value!!.title) }
             var hasError: Boolean by remember { mutableStateOf(false) }
             var label: String by remember { mutableStateOf("Title") }
 
@@ -369,16 +375,27 @@ internal fun ModalPopupCreateCollection(
                             label = validation.msg
                             hasError = true
                         } else {
-                            ActionCollectionProject.openModalCreateCollectionProjectPopup(state = false)
-                            StorageProject.getCurrentProject()?.let {
+                            val newOrEditCollectionProject = CollectionProject(
+                                collectionProject.value!!.id,
+                                collectionProject.value!!.projectID,
+                                text.trim()
+                            )
+
+                            if (stateModalIsEdit.value) {
+                                ActionCollectionProject.editCollection(
+                                    collectionProject = newOrEditCollectionProject
+                                )
+                            } else {
                                 ActionCollectionProject.createCollectionProject(
-                                    collectionProject = CollectionProject(
-                                        StorageCollectionProject.getLastID() + 1,
-                                        it.id,
-                                        text.trim()
-                                    )
+                                    collectionProject = newOrEditCollectionProject
                                 )
                             }
+
+                            ActionCollectionProject.openModalCreateOrEditCollectionProjectPopup(
+                                state = false,
+                                isEdit = false,
+                                collectionProject = null
+                            )
                         }
                     }
                 ) {

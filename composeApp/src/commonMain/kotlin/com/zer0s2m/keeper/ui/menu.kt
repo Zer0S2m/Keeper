@@ -34,13 +34,13 @@ fun MenuDropdownProject(
         onDismissRequest = { expanded.value = false },
         modifier = modifier
     ) {
-        DropdownMenuItemActionDelete(
-            expanded = expanded,
-            onClick = onClickDelete
-        )
         DropdownMenuItemActionEdit(
             expanded = expanded,
             onClick = onClickEdit
+        )
+        DropdownMenuItemActionDelete(
+            expanded = expanded,
+            onClick = onClickDelete
         )
     }
 }
@@ -64,13 +64,43 @@ fun MenuDropdownOrganization(
         onDismissRequest = { expanded.value = false },
         modifier = modifier
     ) {
+        DropdownMenuItemActionEdit(
+            expanded = expanded,
+            onClick = onClickEdit
+        )
         DropdownMenuItemActionDelete(
             expanded = expanded,
             onClick = onClickDelete
         )
+    }
+}
+
+/**
+ * Dropdown menu - for collection.
+ *
+ * @param expanded Whether the menu is expanded or not.
+ * @param modifier [Modifier] to be applied to the menu's content.
+ * @param onClickDelete Action - delete a object.
+ */
+@Composable
+fun MenuDropdownCollection(
+    expanded: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
+    onClickDelete: () -> Unit,
+    onClickEdit: () -> Unit
+) {
+    DropdownMenu(
+        expanded = expanded.value,
+        onDismissRequest = { expanded.value = false },
+        modifier = modifier
+    ) {
         DropdownMenuItemActionEdit(
             expanded = expanded,
             onClick = onClickEdit
+        )
+        DropdownMenuItemActionDelete(
+            expanded = expanded,
+            onClick = onClickDelete
         )
     }
 }

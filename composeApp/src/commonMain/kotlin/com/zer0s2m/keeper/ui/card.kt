@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zer0s2m.keeper.actions.ActionCollectionProject
 import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
@@ -210,19 +212,83 @@ fun CardItemProject(project: Project) {
     }
 }
 
+/**
+ * Component - collection.
+ *
+ * Available actions:
+ *
+ * 1) Deleting a collection via drop-down menu.
+ * 2) Editing a collection via a drop-down menu.
+ *
+ * Contains:
+ *
+ * 1) Drop-down menu for collection management
+ *
+ * @param collectionProject Collection.
+ */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun CardItemCollectionProject(collectionProject: CollectionProject) {
+    val expandedDropdownMenu: MutableState<Boolean> = mutableStateOf(false)
+
     OutlinedCard(
         modifier = Modifier
             .semantics { role = Role.Button }
             .fillMaxWidth()
+            .height(100.dp)
             .pointerHoverIcon(icon = PointerIcon.Hand),
         shape = RoundedCornerShape(SHAPE),
         onClick = { println(collectionProject) }
     ) {
         Column(modifier = Modifier.padding(PADDING * 2, PADDING * 2)) {
-            Text(text = collectionProject.title)
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Document",
+                        maxLines = 1,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 1.sp
+                    )
+                    ButtonMenuRounded(
+                        onClick = { expandedDropdownMenu.value = true },
+                        modifier = Modifier
+                            .width(20.dp)
+                            .height(20.dp),
+                        shape = RoundedCornerShape(SHAPE),
+                        backgroundImage = Color.White
+                    )
+                }
+                MenuDropdownCollection(
+                    expanded = expandedDropdownMenu,
+                    modifier = Modifier.width(180.dp),
+                    onClickEdit = {
+                        ActionCollectionProject.openModalCreateOrEditCollectionProjectPopup(
+                            state = true,
+                            isEdit = true,
+                            collectionProject = CollectionProject(
+                                id = collectionProject.id,
+                                title = collectionProject.title,
+                                projectID = collectionProject.projectID
+                            )
+                        )
+                    },
+                    onClickDelete = {
+                        ActionCollectionProject.deleteCollectionProject(
+                            collectionProjectID = collectionProject.id
+                        )
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(PADDING))
+            Text(
+                text = collectionProject.title,
+                fontSize = 14.sp,
+                lineHeight = 1.sp
+            )
         }
     }
 }
