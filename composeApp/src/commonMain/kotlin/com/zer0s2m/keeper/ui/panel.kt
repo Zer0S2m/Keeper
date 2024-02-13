@@ -16,6 +16,7 @@ import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
+import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.utils.openUrl
 
 /**
@@ -100,10 +101,12 @@ fun RightProjectsPanel(
  * 1) A list of all available collections in the identified active project
  *
  * @param collectionsProject Available collections.
+ * @param navigationController Controller for walking between screens.
  */
 @Composable
 fun RightCollectionProjectPanel(
-    collectionsProject: MutableState<MutableList<CollectionProject>>
+    collectionsProject: MutableState<MutableList<CollectionProject>>,
+    navigationController: NavigationController
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 180.dp),
@@ -114,7 +117,10 @@ fun RightCollectionProjectPanel(
             items = collectionsProject.value,
             key = { it.id }
         ) { collectionProject ->
-            CardItemCollectionProject(collectionProject = collectionProject)
+            CardItemCollectionProject(
+                collectionProject = collectionProject,
+                navigationController = navigationController
+            )
         }
     }
 }

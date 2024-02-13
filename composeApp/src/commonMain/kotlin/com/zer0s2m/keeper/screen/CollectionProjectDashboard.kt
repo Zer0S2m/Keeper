@@ -84,7 +84,10 @@ class CollectionProjectDashboard(override val navigationController: NavigationCo
             )
         }
 
-        RightCollectionProjectPanel(collectionsProject = collectionsProject)
+        RightCollectionProjectPanel(
+            collectionsProject = collectionsProject,
+            navigationController = navigationController
+        )
     }
 
     /**

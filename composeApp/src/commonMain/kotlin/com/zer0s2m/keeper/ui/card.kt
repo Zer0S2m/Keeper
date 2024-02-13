@@ -34,6 +34,9 @@ import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
+import com.zer0s2m.keeper.enum.Screen
+import com.zer0s2m.keeper.navigation.NavigationController
+import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
 import com.zer0s2m.keeper.theme.md_theme_light_primary
@@ -225,10 +228,14 @@ fun CardItemProject(project: Project) {
  * 1) Drop-down menu for collection management
  *
  * @param collectionProject Collection.
+ * @param navigationController Controller for walking between screens.
  */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun CardItemCollectionProject(collectionProject: CollectionProject) {
+fun CardItemCollectionProject(
+    collectionProject: CollectionProject,
+    navigationController: NavigationController
+) {
     val expandedDropdownMenu: MutableState<Boolean> = mutableStateOf(false)
 
     OutlinedCard(
@@ -238,7 +245,12 @@ fun CardItemCollectionProject(collectionProject: CollectionProject) {
             .height(100.dp)
             .pointerHoverIcon(icon = PointerIcon.Hand),
         shape = RoundedCornerShape(SHAPE),
-        onClick = { println(collectionProject) }
+        onClick = {
+            StorageCollectionProject.setCurrentCollectionProject(
+                collectionProject = collectionProject
+            )
+            navigationController.navigate(Screen.HTTP_SCREEN.name)
+        }
     ) {
         Column(modifier = Modifier.padding(PADDING * 2, PADDING * 2)) {
             Box(modifier = Modifier.fillMaxWidth()) {

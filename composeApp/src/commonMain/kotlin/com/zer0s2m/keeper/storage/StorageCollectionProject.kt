@@ -13,7 +13,7 @@ object StorageCollectionProject : Storage {
     /**
      * Current selected collection.
      */
-    private val currentCollectionProject: CollectionProject? = null
+    private val currentCollectionProject: MutableState<CollectionProject?> = mutableStateOf(null)
 
     /**
      * All available collections.
@@ -157,6 +157,10 @@ object StorageCollectionProject : Storage {
         }
 
         this.collectionsProject.value = newCollectionsProject
+    }
+
+    internal fun setCurrentCollectionProject(collectionProject: CollectionProject?) {
+        currentCollectionProject.value = collectionProject
     }
 
 }

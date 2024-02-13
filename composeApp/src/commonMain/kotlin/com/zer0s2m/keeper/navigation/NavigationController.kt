@@ -19,7 +19,7 @@ class NavigationController(
      */
     var currentScreen: MutableState<String> = mutableStateOf(startDestination)
 
-    suspend fun navigate(route: String) {
+    fun navigate(route: String) {
         if (route != currentScreen.value) {
             if (backStackScreen.contains(currentScreen.value) && currentScreen.value != startDestination) {
                 backStackScreen.remove(currentScreen.value)
