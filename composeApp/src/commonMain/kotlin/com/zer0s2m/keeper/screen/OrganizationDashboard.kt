@@ -155,7 +155,7 @@ private fun PanelProjects(navigationController: NavigationController) {
  *
  * Includes:
  *
- * 1) todo
+ * 1) All available collections of the selected project.
  *
  * @param navigationController Controller for walking between screens.
  */

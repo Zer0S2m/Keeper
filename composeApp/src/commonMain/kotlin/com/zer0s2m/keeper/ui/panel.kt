@@ -107,10 +107,13 @@ fun RightCollectionProjectPanel(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 180.dp),
-        verticalArrangement = Arrangement.spacedBy(PADDING),
+        verticalArrangement = Arrangement.spacedBy(PADDING * 2),
         horizontalArrangement = Arrangement.spacedBy(PADDING * 2),
     ) {
-        items(collectionsProject.value) { collectionProject ->
+        items(
+            items = collectionsProject.value,
+            key = { it.id }
+        ) { collectionProject ->
             CardItemCollectionProject(collectionProject = collectionProject)
         }
     }
