@@ -15,6 +15,8 @@ enum class Icon(val path: String) {
 
     ICON_DELETE_ROUNDED("icons/icon-delete-rounded.svg"),
 
-    ICON_PENCIL("icons/icon-pencil.svg")
+    ICON_PENCIL("icons/icon-pencil.svg"),
+
+    ICON_ARROW_LEFT("icons/icon-arrow-left.svg")
 
 }

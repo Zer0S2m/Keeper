@@ -46,7 +46,7 @@ class OrganizationDashboard(override val navigationController: NavigationControl
                     .height(40.dp)
                     .fillMaxWidth()
             ) {
-                TopPanel()
+                TopPanel(navigationController = navigationController)
             }
             Divider(
                 color = Color.Gray,

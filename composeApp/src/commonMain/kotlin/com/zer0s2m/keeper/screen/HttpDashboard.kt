@@ -27,7 +27,7 @@ class HttpDashboard(override val navigationController: NavigationController) : B
                     .height(40.dp)
                     .fillMaxWidth()
             ) {
-                TopPanel()
+                TopPanel(navigationController = navigationController)
             }
             Divider(
                 color = Color.Gray,

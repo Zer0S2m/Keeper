@@ -19,6 +19,11 @@ class NavigationController(
      */
     var currentScreen: MutableState<String> = mutableStateOf(startDestination)
 
+    /**
+     * A sign that you can turn on the reverse. screen navigation.
+     */
+    var isEnabledNavigateBack: MutableState<Boolean> = mutableStateOf(false)
+
     fun navigate(route: String) {
         if (route != currentScreen.value) {
             if (backStackScreen.contains(currentScreen.value) && currentScreen.value != startDestination) {
@@ -28,6 +33,7 @@ class NavigationController(
             if (route == startDestination) {
                 backStackScreen = mutableSetOf()
             } else {
+                isEnabledNavigateBack.value = true
                 backStackScreen.add(currentScreen.value)
             }
 
@@ -39,6 +45,10 @@ class NavigationController(
         if (backStackScreen.isNotEmpty()) {
             currentScreen.value = backStackScreen.last()
             backStackScreen.remove(currentScreen.value)
+
+            if (backStackScreen.isEmpty()) {
+                isEnabledNavigateBack.value = false
+            }
         }
     }
 

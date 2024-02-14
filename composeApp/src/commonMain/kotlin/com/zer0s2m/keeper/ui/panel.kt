@@ -7,8 +7,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.zer0s2m.keeper.constant.PADDING
@@ -25,14 +27,24 @@ import com.zer0s2m.keeper.utils.openUrl
  * Includes:
  *
  * 1) GitHub link.
+ * 2) Reverse screen navigation.
+ *
+ * @param navigationController
  */
 @Composable
-fun TopPanel() {
+fun TopPanel(
+    navigationController: NavigationController
+) {
     Row(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        ButtonArrowLeft(
+            onClick = { navigationController.navigateBack() },
+            shape = RoundedCornerShape(SHAPE),
+            enabled = navigationController.isEnabledNavigateBack.value
+        )
         ButtonGitHub(
-            modifier = Modifier.padding(start = 2.dp),
             shape = RoundedCornerShape(SHAPE),
             onClick = {
                 openUrl(url = "https://github.com/Zer0S2m")

@@ -13,4 +13,3 @@ fun rememberNavigationController(
 ): MutableState<NavigationController> = rememberSaveable {
     mutableStateOf(NavigationController(startDestination, backStackScreen))
 }
-
