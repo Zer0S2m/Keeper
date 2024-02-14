@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.CollectionProject
+import com.zer0s2m.keeper.dto.HttpRequest
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.navigation.NavigationController
@@ -133,6 +134,34 @@ fun RightCollectionProjectPanel(
                 collectionProject = collectionProject,
                 navigationController = navigationController
             )
+        }
+    }
+}
+
+/**
+ * Panel.
+ *
+ * Includes:
+ *
+ * 1) A list of all available http requests in the identified active collection.
+ *
+ * @param httpRequests Available http requests.
+ * @param modifier The modifier to apply to this layout.
+ */
+@Composable
+fun RightHttpRequestsPanel(
+    httpRequests: MutableState<MutableList<HttpRequest>>,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(PADDING * 2)
+    ) {
+        items(
+            items = httpRequests.value,
+            key = { it.id }
+        ) { httpRequest ->
+            CardItemHttpRequest(httpRequest = httpRequest)
         }
     }
 }

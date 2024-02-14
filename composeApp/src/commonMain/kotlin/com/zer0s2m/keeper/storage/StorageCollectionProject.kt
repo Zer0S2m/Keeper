@@ -163,4 +163,8 @@ object StorageCollectionProject : Storage {
         currentCollectionProject.value = collectionProject
     }
 
+    internal fun getCurrentCollectionProject(): CollectionProject? {
+        return currentCollectionProject.value;
+    }
+
 }

@@ -2,7 +2,7 @@ package com.zer0s2m.keeper.enum
 
 import androidx.compose.ui.graphics.Color
 
-enum class HttpMethod(color: Color) {
+enum class HttpMethod(val color: Color) {
 
     GET(color = Color(red = 97, green = 175, blue = 254)),
 

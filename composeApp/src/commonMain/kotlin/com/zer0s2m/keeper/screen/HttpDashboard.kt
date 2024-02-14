@@ -6,8 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
+import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.navigation.NavigationController
+import com.zer0s2m.keeper.storage.StorageCollectionProject
+import com.zer0s2m.keeper.storage.StorageHttpRequest
 import com.zer0s2m.keeper.ui.BaseDashboard
 import com.zer0s2m.keeper.ui.TopPanel
 
@@ -39,8 +43,16 @@ class HttpDashboard(override val navigationController: NavigationController) : B
                 Column(modifier = Modifier
                     .fillMaxHeight()
                     .width(WIDTH_RIGHT_PANEL + 52.dp)
+                    .padding(PADDING * 2)
                 ) {
-                    HttpRequestsDashboard(navigationController = navigationController).render()
+                    StorageCollectionProject.getCurrentCollectionProject()
+                        ?.let { collectionProject: CollectionProject ->
+                            HttpRequestsDashboard(navigationController = navigationController)
+                                .setProjects(StorageHttpRequest.getAllHttpRequestByCollectionProjectID(
+                                    collectionProjectID = collectionProject.id
+                                ))
+                                .render()
+                    }
                 }
                 Divider(
                     color = Color.Gray,

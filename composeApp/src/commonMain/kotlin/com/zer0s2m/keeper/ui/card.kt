@@ -32,6 +32,7 @@ import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.constant.WIDTH_ACTIVE_CARD
 import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
 import com.zer0s2m.keeper.dto.CollectionProject
+import com.zer0s2m.keeper.dto.HttpRequest
 import com.zer0s2m.keeper.dto.Organization
 import com.zer0s2m.keeper.dto.Project
 import com.zer0s2m.keeper.enum.Screen
@@ -301,6 +302,36 @@ fun CardItemCollectionProject(
                 fontSize = 14.sp,
                 lineHeight = 1.sp
             )
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun CardItemHttpRequest(httpRequest: HttpRequest) {
+    Card(
+        modifier = Modifier
+            .semantics { role = Role.Button }
+            .fillMaxWidth()
+            .pointerHoverIcon(icon = PointerIcon.Hand),
+        shape = RoundedCornerShape(SHAPE),
+        interactionSource = remember { MutableInteractionSource() },
+        onClick = { println(httpRequest) }
+    ) {
+        Column(modifier = Modifier.padding(PADDING * 2, PADDING * 3)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = httpRequest.method.name,
+                    color = httpRequest.method.color,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.width(86.dp),
+                    fontSize = 14.sp
+                )
+                Text(httpRequest.title)
+            }
         }
     }
 }

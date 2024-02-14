@@ -27,4 +27,16 @@ object StorageHttpRequest : Storage {
         addAllHttpRequest(httpRequests)
     }
 
+    /**
+     * Get all available http requests for the selected collection by ID.
+     *
+     * @param collectionProjectID Collection ID.
+     * @return Available http requests.
+     */
+    internal fun getAllHttpRequestByCollectionProjectID(collectionProjectID: Long): Collection<HttpRequest> {
+        return httpRequests.value.filter { httpRequest: HttpRequest ->
+            httpRequest.collectionID == collectionProjectID
+        }
+    }
+
 }
