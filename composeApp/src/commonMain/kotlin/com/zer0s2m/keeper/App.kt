@@ -27,6 +27,7 @@ internal fun App() = AppTheme {
         loadStorageOrganization()
         loadStorageProjects()
         loadStorageCollection()
+        loadStorageHttpRequest()
         loadStorageState() // Load with the latest
     }
 
