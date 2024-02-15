@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.zer0s2m.keeper.enum.Screen
+import com.zer0s2m.keeper.navigation.graphs.CollectScreenHttpDashboard
 import com.zer0s2m.keeper.navigation.graphs.CollectScreenOrganizationDashboard
 import com.zer0s2m.keeper.navigation.runtime.rememberNavigationController
 import com.zer0s2m.keeper.theme.AppTheme
@@ -26,6 +27,7 @@ internal fun App() = AppTheme {
         loadStorageOrganization()
         loadStorageProjects()
         loadStorageCollection()
+        loadStorageHttpRequest()
         loadStorageState() // Load with the latest
     }
 
@@ -34,7 +36,8 @@ internal fun App() = AppTheme {
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        CollectScreenOrganizationDashboard(navigationController)
+        CollectScreenOrganizationDashboard(navigationController = navigationController)
+        CollectScreenHttpDashboard(navigationController = navigationController)
     }
 }
 

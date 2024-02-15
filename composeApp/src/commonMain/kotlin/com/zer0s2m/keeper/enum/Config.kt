@@ -15,6 +15,8 @@ enum class Config(val path: String) {
 
     PATH_DB_COLLECTION(PATH_DIRECTORY_CONFIG.path + "/collection-db.json"),
 
+    PATH_DB_HTTP_REQUEST(PATH_DIRECTORY_CONFIG.path + "/http-request-db.json"),
+
     PATH_DB_STATE(PATH_DIRECTORY_CONFIG.path + "/state-db.json")
 
 }

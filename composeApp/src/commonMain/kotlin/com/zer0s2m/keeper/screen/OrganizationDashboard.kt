@@ -46,7 +46,7 @@ class OrganizationDashboard(override val navigationController: NavigationControl
                     .height(40.dp)
                     .fillMaxWidth()
             ) {
-                TopPanel()
+                TopPanel(navigationController = navigationController)
             }
             Divider(
                 color = Color.Gray,
@@ -155,7 +155,7 @@ private fun PanelProjects(navigationController: NavigationController) {
  *
  * Includes:
  *
- * 1) todo
+ * 1) All available collections of the selected project.
  *
  * @param navigationController Controller for walking between screens.
  */

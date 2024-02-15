@@ -144,3 +144,41 @@ fun ButtonMenuRounded(
         )
     }
 }
+
+/**
+ * Button component - arrow left.
+ *
+ * @param onClick Will be called when the user clicks the button.
+ * @param modifier Modifier to be applied to the layout corresponding to the [Surface].
+ * @param modifierButton Modifier to be applied to the button.
+ * @param shape Defines the surface's shape as well its shadow.
+ * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
+ */
+@Composable
+@OptIn(ExperimentalMaterialApi::class)
+fun ButtonArrowLeft(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    modifierButton: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    enabled: Boolean = true,
+) {
+    Surface(
+        onClick = onClick,
+        shape = shape,
+        modifier = modifier.semantics { role = Role.Button },
+        enabled = enabled
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifierButton.pointerHoverIcon(icon = PointerIcon.Hand),
+            content = {
+                Image(
+                    painter = painterResource(resourcePath = com.zer0s2m.keeper.enum.Icon.ICON_ARROW_LEFT.path),
+                    contentDescription = "Will come back"
+                )
+            }
+        )
+    }
+}
