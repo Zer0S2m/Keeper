@@ -19,11 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.theme.md_theme_light_surfaceVariant
 
 /**
- * Button - github.
+ * Standalone component - button - github.
  *
  * @param onClick Will be called when the user clicks the button.
  * @param modifier Modifier to be applied to the button.
@@ -42,7 +44,7 @@ fun ButtonGitHub(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = RectangleShape,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     Surface(
         onClick = onClick,
@@ -52,22 +54,23 @@ fun ButtonGitHub(
         interactionSource = interactionSource,
     ) {
         Row(
-            modifier = Modifier
-                .pointerHoverIcon(icon = PointerIcon.Hand)
-                .padding(PADDING),
+            modifier =
+                Modifier
+                    .pointerHoverIcon(icon = PointerIcon.Hand)
+                    .padding(PADDING),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(resourcePath = com.zer0s2m.keeper.enum.Icon.ICON_GITHUB.path),
-                contentDescription = "GitHub icon"
+                contentDescription = "GitHub icon",
             )
         }
     }
 }
 
 /**
- * Button component - creating a new object.
+ * Standalone component - button - creating a new object.
  *
  * @param onClick Will be called when the user clicks the button.
  * @param modifier Modifier to be applied to the layout corresponding to the [Surface].
@@ -88,7 +91,7 @@ fun ButtonAdd(
         onClick = onClick,
         shape = shape,
         modifier = modifier.semantics { role = Role.Button },
-        enabled = enabled
+        enabled = enabled,
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -97,15 +100,15 @@ fun ButtonAdd(
             content = {
                 Image(
                     painter = painterResource(resourcePath = com.zer0s2m.keeper.enum.Icon.ICON_ADD.path),
-                    contentDescription = "Add icon"
+                    contentDescription = "Add icon",
                 )
-            }
+            },
         )
     }
 }
 
 /**
- * Button component - menu.
+ * Standalone component - button - menu.
  *
  * @param onClick Will be called when the user clicks the button.
  * @param modifier Modifier to be applied to the layout corresponding to the [Surface].
@@ -113,6 +116,8 @@ fun ButtonAdd(
  * @param shape Defines the surface's shape as well its shadow.
  * @param enabled Controls the enabled state of the button. When `false`, this button will not be clickable.
  * @param backgroundImage Color to paint background with.
+ * @param widthImage The width of the icon inside the component.
+ * @param heightImage The height of the icon inside the component.
  */
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
@@ -122,13 +127,14 @@ fun ButtonMenuRounded(
     modifierButton: Modifier = Modifier,
     shape: Shape = RectangleShape,
     enabled: Boolean = true,
-    backgroundImage: Color = md_theme_light_surfaceVariant
+    widthImage: Dp = 24.dp,
+    heightImage: Dp = 24.dp,
 ) {
     Surface(
         onClick = onClick,
         shape = shape,
         modifier = modifier.semantics { role = Role.Button },
-        enabled = enabled
+        enabled = enabled,
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -136,17 +142,20 @@ fun ButtonMenuRounded(
             modifier = modifierButton.pointerHoverIcon(icon = PointerIcon.Hand),
             content = {
                 Image(
-                    modifier = Modifier.background(color = backgroundImage),
+                    modifier =
+                        Modifier
+                            .width(widthImage)
+                            .height(heightImage),
                     painter = painterResource(resourcePath = com.zer0s2m.keeper.enum.Icon.ICON_MENU_ROUNDED.path),
-                    contentDescription = "Menu icon"
+                    contentDescription = "Menu icon",
                 )
-            }
+            },
         )
     }
 }
 
 /**
- * Button component - arrow left.
+ * Standalone component - button - arrow left.
  *
  * @param onClick Will be called when the user clicks the button.
  * @param modifier Modifier to be applied to the layout corresponding to the [Surface].
@@ -167,7 +176,7 @@ fun ButtonArrowLeft(
         onClick = onClick,
         shape = shape,
         modifier = modifier.semantics { role = Role.Button },
-        enabled = enabled
+        enabled = enabled,
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -176,9 +185,9 @@ fun ButtonArrowLeft(
             content = {
                 Image(
                     painter = painterResource(resourcePath = com.zer0s2m.keeper.enum.Icon.ICON_ARROW_LEFT.path),
-                    contentDescription = "Will come back"
+                    contentDescription = "Will come back",
                 )
-            }
+            },
         )
     }
 }
