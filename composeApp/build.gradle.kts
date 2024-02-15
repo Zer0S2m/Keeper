@@ -18,7 +18,6 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(libs.kotlinx.coroutines.core)
@@ -32,7 +31,6 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.common)
             implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
         }
 
     }

@@ -95,12 +95,12 @@ class OrganizationDashboard(override val navigationController: NavigationControl
 private fun RightPanel() {
     Column(
         modifier = Modifier
-            .width(52.dp)
+            .width(60.dp)
             .padding(PADDING)
     ) {
         ButtonAdd(
             modifier = Modifier.fillMaxWidth(),
-            modifierButton = Modifier.height(40.dp),
+            modifierButton = Modifier.height(44.dp),
             shape = RoundedCornerShape(SHAPE),
             onClick = {
                 ActionOrganization.openModalCreateOrEditOrganizationPopup(

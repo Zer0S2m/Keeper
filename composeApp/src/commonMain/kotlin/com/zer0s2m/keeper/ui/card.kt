@@ -1,17 +1,19 @@
 package com.zer0s2m.keeper.ui
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.HoverInteraction
+import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -21,7 +23,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zer0s2m.keeper.actions.ActionCollectionProject
@@ -29,7 +30,6 @@ import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
-import com.zer0s2m.keeper.constant.WIDTH_ACTIVE_CARD
 import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
 import com.zer0s2m.keeper.dto.CollectionProject
 import com.zer0s2m.keeper.dto.HttpRequest
@@ -40,11 +40,10 @@ import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageOrganization
 import com.zer0s2m.keeper.storage.StorageProject
-import com.zer0s2m.keeper.theme.md_theme_light_primary
 import com.zer0s2m.keeper.utils.formatTitleOrganization
 
 /**
- * Component - organization.
+ * Standalone component - organization.
  *
  * Available actions:
  *
@@ -59,26 +58,36 @@ import com.zer0s2m.keeper.utils.formatTitleOrganization
  * @param organization Organization for drawing.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 fun CardItemOrganization(organization: Organization) {
     val expandedDropdownMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val enabled: MutableState<Boolean> = mutableStateOf(true)
 
-    Card(
-        modifier = Modifier
-            .semantics { role = Role.Button }
-            .fillMaxWidth()
-            .onPointerEvent(
-                eventType = PointerEventType.Press,
-                pass = PointerEventPass.Final,
-            ) { event ->
-                if (event.button?.isSecondary == true) {
-                    expandedDropdownMenu.value = true
+    var modifier: Modifier = Modifier
+    if (organization == StorageOrganization.getCurrentOrganization()) {
+        enabled.value = false
+        modifier = modifier.borderActiveCard()
+    }
+
+    Surface(
+        modifier =
+            Modifier
+                .semantics { role = Role.Button }
+                .fillMaxSize()
+                .onPointerEvent(
+                    eventType = PointerEventType.Press,
+                    pass = PointerEventPass.Final,
+                ) { event ->
+                    if (event.button?.isSecondary == true) {
+                        expandedDropdownMenu.value = true
+                    }
                 }
-            }
-            .pointerHoverIcon(icon = PointerIcon.Hand),
+                .pointerHoverIcon(icon = PointerIcon.Hand)
+                .then(modifier),
         shape = RoundedCornerShape(SHAPE),
         interactionSource = remember { MutableInteractionSource() },
-        onClick = { ActionOrganization.changeOrganization(organization) }
+        onClick = { ActionOrganization.changeOrganization(organization) },
+        enabled = enabled.value
     ) {
         MenuDropdownOrganization(
             expanded = expandedDropdownMenu,
@@ -87,38 +96,24 @@ fun CardItemOrganization(organization: Organization) {
                 ActionOrganization.openModalCreateOrEditOrganizationPopup(
                     state = true,
                     isEdit = true,
-                    organization = organization
+                    organization = organization,
                 )
-            }
+            },
         )
 
-        Row(modifier = Modifier.fillMaxSize()) {
-            var offsetX: Dp = 0.dp
-            if (organization == StorageOrganization.getCurrentOrganization()) {
-                Box(
-                    modifier = Modifier
-                        .height(38.dp)
-                        .width(WIDTH_ACTIVE_CARD)
-                        .background(md_theme_light_primary)
-                )
-                offsetX = (-1).dp
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(0.dp, PADDING * 2)
-            ) {
-                Text(
-                    text = formatTitleOrganization(organization.title),
-                    maxLines = 1,
-                    fontWeight = FontWeight.Bold,
-                    lineHeight = 1.sp,
-                    modifier = Modifier.offset(x = offsetX)
-                )
-            }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp, PADDING * 3),
+        ) {
+            Text(
+                text = formatTitleOrganization(organization.title),
+                maxLines = 1,
+                fontWeight = FontWeight.Bold,
+                lineHeight = 1.sp
+            )
         }
     }
 }
@@ -139,26 +134,33 @@ fun CardItemOrganization(organization: Organization) {
  * @param project Organization for project.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 fun CardItemProject(project: Project) {
     val expandedDropdownMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
 
-    Card(
-        modifier = Modifier
-            .semantics { role = Role.Button }
-            .fillMaxWidth()
-            .onPointerEvent(
-                eventType = PointerEventType.Press,
-                pass = PointerEventPass.Final,
-            ) { event ->
-                if (event.button?.isSecondary == true) {
-                    expandedDropdownMenu.value = true
+    var modifier: Modifier = Modifier
+    if (project == StorageProject.getCurrentProject()) {
+        modifier = modifier.borderActiveCard()
+    }
+
+    Surface(
+        modifier =
+            Modifier
+                .semantics { role = Role.Button }
+                .fillMaxWidth()
+                .onPointerEvent(
+                    eventType = PointerEventType.Press,
+                    pass = PointerEventPass.Final,
+                ) { event ->
+                    if (event.button?.isSecondary == true) {
+                        expandedDropdownMenu.value = true
+                    }
                 }
-            }
-            .pointerHoverIcon(icon = PointerIcon.Hand),
+                .pointerHoverIcon(icon = PointerIcon.Hand)
+                .then(modifier),
         shape = RoundedCornerShape(SHAPE),
         interactionSource = remember { MutableInteractionSource() },
-        onClick = { ActionProject.changeProject(project) }
+        onClick = { ActionProject.changeProject(project) },
     ) {
         MenuDropdownProject(
             modifier = Modifier.width(WIDTH_RIGHT_PANEL - (PADDING * 4)),
@@ -168,34 +170,20 @@ fun CardItemProject(project: Project) {
                 ActionProject.openModalCreateOrEditProjectPopup(
                     state = true,
                     isEdit = true,
-                    project = Project(
-                        project.id,
-                        project.organizationID,
-                        project.title
-                    )
+                    project =
+                        Project(
+                            project.id,
+                            project.organizationID,
+                            project.title,
+                        ),
                 )
-            }
+            },
         )
 
         Row(modifier = Modifier.fillMaxSize()) {
-            var deletePadding: Dp = 0.dp
-            if (project == StorageProject.getCurrentProject()) {
-                Box(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .width(WIDTH_ACTIVE_CARD)
-                        .background(md_theme_light_primary)
-                )
-                deletePadding = WIDTH_ACTIVE_CARD
-            }
-
             Column(
-                modifier = Modifier.padding(
-                    start = (PADDING * 2) - deletePadding,
-                    top = PADDING * 2,
-                    end = PADDING * 2,
-                    bottom = PADDING * 2
-                )
+                modifier =
+                    Modifier.padding(PADDING * 2, PADDING * 3),
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -205,10 +193,13 @@ fun CardItemProject(project: Project) {
                     Text(text = project.title)
                     ButtonMenuRounded(
                         onClick = { expandedDropdownMenu.value = true },
-                        modifier = Modifier
-                            .width(20.dp)
-                            .height(20.dp),
-                        shape = RoundedCornerShape(SHAPE)
+                        modifier =
+                            Modifier
+                                .width(20.dp)
+                                .height(20.dp),
+                        shape = RoundedCornerShape(SHAPE),
+                        widthImage = 16.dp,
+                        heightImage = 16.dp,
                     )
                 }
             }
@@ -232,47 +223,68 @@ fun CardItemProject(project: Project) {
  * @param navigationController Controller for walking between screens.
  */
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 fun CardItemCollectionProject(
     collectionProject: CollectionProject,
-    navigationController: NavigationController
+    navigationController: NavigationController,
 ) {
-    val expandedDropdownMenu: MutableState<Boolean> = mutableStateOf(false)
+    val interactionSourceHover: MutableInteractionSource = remember { MutableInteractionSource() }
+    val isHover: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val expandedDropdownMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val animatedCardColor: State<Color> = setAnimateColorAsStateInCard(isHover = isHover)
 
-    OutlinedCard(
-        modifier = Modifier
-            .semantics { role = Role.Button }
-            .fillMaxWidth()
-            .height(100.dp)
-            .pointerHoverIcon(icon = PointerIcon.Hand),
+    setHoverInComponent(
+        interactionSource = interactionSourceHover,
+        isHover = isHover
+    )
+
+    Surface(
+        modifier =
+            Modifier
+                .semantics { role = Role.Button }
+                .fillMaxWidth()
+                .height(120.dp)
+                .onPointerEvent(
+                    eventType = PointerEventType.Press,
+                    pass = PointerEventPass.Final,
+                ) { event ->
+                    if (event.button?.isSecondary == true) {
+                        expandedDropdownMenu.value = true
+                    }
+                }
+                .pointerHoverIcon(icon = PointerIcon.Hand)
+                .hoverable(interactionSource = interactionSourceHover),
         shape = RoundedCornerShape(SHAPE),
         onClick = {
             StorageCollectionProject.setCurrentCollectionProject(
-                collectionProject = collectionProject
+                collectionProject = collectionProject,
             )
             navigationController.navigate(Screen.HTTP_SCREEN.name)
-        }
+        },
+        border = BorderStroke(1.dp, animatedCardColor.value)
     ) {
         Column(modifier = Modifier.padding(PADDING * 2, PADDING * 2)) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = "Document",
                         maxLines = 1,
                         fontWeight = FontWeight.Bold,
-                        lineHeight = 1.sp
+                        lineHeight = 1.sp,
                     )
                     ButtonMenuRounded(
                         onClick = { expandedDropdownMenu.value = true },
-                        modifier = Modifier
-                            .width(20.dp)
-                            .height(20.dp),
+                        modifier =
+                            Modifier
+                                .width(20.dp)
+                                .height(20.dp),
                         shape = RoundedCornerShape(SHAPE),
-                        backgroundImage = Color.White
+                        widthImage = 16.dp,
+                        heightImage = 16.dp,
                     )
                 }
                 MenuDropdownCollection(
@@ -282,25 +294,26 @@ fun CardItemCollectionProject(
                         ActionCollectionProject.openModalCreateOrEditCollectionProjectPopup(
                             state = true,
                             isEdit = true,
-                            collectionProject = CollectionProject(
-                                id = collectionProject.id,
-                                title = collectionProject.title,
-                                projectID = collectionProject.projectID
-                            )
+                            collectionProject =
+                                CollectionProject(
+                                    id = collectionProject.id,
+                                    title = collectionProject.title,
+                                    projectID = collectionProject.projectID,
+                                ),
                         )
                     },
                     onClickDelete = {
                         ActionCollectionProject.deleteCollectionProject(
-                            collectionProjectID = collectionProject.id
+                            collectionProjectID = collectionProject.id,
                         )
-                    }
+                    },
                 )
             }
             Spacer(modifier = Modifier.height(PADDING))
             Text(
                 text = collectionProject.title,
                 fontSize = 14.sp,
-                lineHeight = 1.sp
+                lineHeight = 1.sp,
             )
         }
     }
@@ -310,28 +323,68 @@ fun CardItemCollectionProject(
 @OptIn(ExperimentalMaterial3Api::class)
 fun CardItemHttpRequest(httpRequest: HttpRequest) {
     Card(
-        modifier = Modifier
-            .semantics { role = Role.Button }
-            .fillMaxWidth()
-            .pointerHoverIcon(icon = PointerIcon.Hand),
+        modifier =
+            Modifier
+                .semantics { role = Role.Button }
+                .fillMaxWidth()
+                .pointerHoverIcon(icon = PointerIcon.Hand),
         shape = RoundedCornerShape(SHAPE),
         interactionSource = remember { MutableInteractionSource() },
-        onClick = { println(httpRequest) }
+        onClick = { println(httpRequest) },
     ) {
         Column(modifier = Modifier.padding(PADDING * 2, PADDING * 3)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = httpRequest.method.name,
                     color = httpRequest.method.color,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.width(86.dp),
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
                 Text(httpRequest.title)
             }
         }
     }
+}
+
+@Composable
+private fun Modifier.borderActiveCard() = this
+    .then(Modifier.border(1.dp, MaterialTheme.colors.primary, RoundedCornerShape(SHAPE)))
+
+@Composable
+private fun setHoverInComponent(
+    interactionSource: MutableInteractionSource,
+    isHover: MutableState<Boolean>
+) {
+    val interactions = remember { mutableStateListOf<Interaction>() }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is HoverInteraction.Enter -> {
+                    interactions.add(interaction)
+                    isHover.value = true
+                }
+                is HoverInteraction.Exit -> {
+                    interactions.add(interaction)
+                    isHover.value = false
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun setAnimateColorAsStateInCard(
+    isHover: MutableState<Boolean>,
+    borderColor: Color = MaterialTheme.colors.primary,
+    borderHover: Color = MaterialTheme.colors.onBackground
+): State<Color> {
+    return animateColorAsState(
+        targetValue = if (isHover.value) borderColor else borderHover,
+        animationSpec = tween(0, 0, LinearEasing)
+    )
 }
