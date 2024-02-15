@@ -10,6 +10,8 @@ data class HttpRequest(
 
     val method: HttpMethod,
 
-    val collectionID: Long
+    val collectionID: Long,
+
+    val url: String
 
 ) : Model

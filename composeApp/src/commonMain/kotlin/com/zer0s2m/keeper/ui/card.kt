@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zer0s2m.keeper.actions.ActionCollectionProject
+import com.zer0s2m.keeper.actions.ActionHttpRequest
 import com.zer0s2m.keeper.actions.ActionOrganization
 import com.zer0s2m.keeper.actions.ActionProject
 import com.zer0s2m.keeper.constant.PADDING
@@ -330,7 +331,7 @@ fun CardItemHttpRequest(httpRequest: HttpRequest) {
                 .pointerHoverIcon(icon = PointerIcon.Hand),
         shape = RoundedCornerShape(SHAPE),
         interactionSource = remember { MutableInteractionSource() },
-        onClick = { println(httpRequest) },
+        onClick = { ActionHttpRequest.changeHttpRequest(httpRequest = httpRequest) },
     ) {
         Column(modifier = Modifier.padding(PADDING * 2, PADDING * 3)) {
             Row(

@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.WIDTH_RIGHT_PANEL
 import com.zer0s2m.keeper.dto.CollectionProject
+import com.zer0s2m.keeper.dto.HttpRequest
 import com.zer0s2m.keeper.navigation.NavigationController
 import com.zer0s2m.keeper.storage.StorageCollectionProject
 import com.zer0s2m.keeper.storage.StorageHttpRequest
@@ -19,7 +20,6 @@ import com.zer0s2m.keeper.ui.TopPanel
  * @param navigationController Controller for walking between screens.
  */
 class HttpDashboard(override val navigationController: NavigationController) : BaseDashboard {
-
     /**
      * Call screen render.
      */
@@ -27,41 +27,53 @@ class HttpDashboard(override val navigationController: NavigationController) : B
     override fun render() {
         Column {
             Column(
-                modifier = Modifier
-                    .height(40.dp)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .height(40.dp)
+                        .fillMaxWidth(),
             ) {
                 TopPanel(navigationController = navigationController)
             }
             Divider(
                 color = Color.Gray,
-                modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .height(1.dp)
+                        .fillMaxWidth(),
             )
             Row {
-                Column(modifier = Modifier
-                    .fillMaxHeight()
-                    .width(WIDTH_RIGHT_PANEL + 52.dp)
-                    .padding(PADDING * 2)
+                Column(
+                    modifier =
+                        Modifier
+                            .fillMaxHeight()
+                            .width(WIDTH_RIGHT_PANEL + 60.dp)
+                            .padding(PADDING * 2),
                 ) {
                     StorageCollectionProject.getCurrentCollectionProject()
                         ?.let { collectionProject: CollectionProject ->
                             HttpRequestsDashboard(navigationController = navigationController)
-                                .setProjects(StorageHttpRequest.getAllHttpRequestByCollectionProjectID(
-                                    collectionProjectID = collectionProject.id
-                                ))
+                                .setProjects(
+                                    StorageHttpRequest.getAllHttpRequestByCollectionProjectID(
+                                        collectionProjectID = collectionProject.id,
+                                    ),
+                                )
                                 .render()
-                    }
+                        }
                 }
                 Divider(
                     color = Color.Gray,
-                    modifier = Modifier
-                        .width(1.dp)
-                        .fillMaxHeight()
+                    modifier =
+                        Modifier
+                            .width(1.dp)
+                            .fillMaxHeight(),
                 )
+
+                StorageHttpRequest.getCurrentHttpRequest()?.let { httpRequest: HttpRequest ->
+                    HttpRequestDashboard(navigationController = navigationController)
+                        .setHttpRequest(httpRequest)
+                        .render()
+                }
             }
         }
     }
-
 }

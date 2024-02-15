@@ -10,6 +10,11 @@ import com.zer0s2m.keeper.dto.HttpRequest
 object StorageHttpRequest : Storage {
 
     /**
+     * Current selected http request.
+     */
+    private val currentHttpRequest: MutableState<HttpRequest?> = mutableStateOf(null)
+
+    /**
      * All possible http request.
      */
     private val httpRequests: MutableState<MutableList<HttpRequest>> = mutableStateOf(mutableListOf())
@@ -37,6 +42,24 @@ object StorageHttpRequest : Storage {
         return httpRequests.value.filter { httpRequest: HttpRequest ->
             httpRequest.collectionID == collectionProjectID
         }
+    }
+
+    /**
+     * Set new active http request.
+     *
+     * @param httpRequest Http request.
+     */
+    internal fun setCurrentHttpRequest(httpRequest: HttpRequest?) {
+        currentHttpRequest.value = httpRequest
+    }
+
+    /**
+     * Get active http request.
+     *
+     * @return Current http request.
+     */
+    internal fun getCurrentHttpRequest(): HttpRequest? {
+        return currentHttpRequest.value
     }
 
 }
