@@ -69,9 +69,11 @@ class HttpDashboard(override val navigationController: NavigationController) : B
                 )
 
                 StorageHttpRequest.getCurrentHttpRequest()?.let { httpRequest: HttpRequest ->
-                    HttpRequestDashboard(navigationController = navigationController)
-                        .setHttpRequest(httpRequest)
-                        .render()
+                    Column {
+                        HttpRequestDashboard(navigationController = navigationController)
+                            .setHttpRequest(httpRequest)
+                            .render()
+                    }
                 }
             }
         }

@@ -7,11 +7,20 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.zer0s2m.keeper.constant.PADDING
 import com.zer0s2m.keeper.constant.SHAPE
 import com.zer0s2m.keeper.dto.CollectionProject
@@ -167,6 +176,55 @@ fun RightHttpRequestsPanel(
             key = { it.id }
         ) { httpRequest ->
             CardItemHttpRequest(httpRequest = httpRequest)
+        }
+    }
+}
+
+@Composable
+fun TopPanelHttpRequest(httpRequest: HttpRequest) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = PADDING * 2)
+            ) {
+                Text(
+                    text = httpRequest.method.name,
+                    color = httpRequest.method.color,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.width(86.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 14.sp,
+                )
+                Divider(
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .height(0.dp)
+                        .width(PADDING * 2),
+                )
+
+                val urlHttpRequest: MutableState<String> = remember { mutableStateOf(httpRequest.url) }
+                TextFieldURLHttpRequest(
+                    url = urlHttpRequest.value,
+                    onValueChange = { newValue: String ->
+                        urlHttpRequest.value = newValue
+                    }
+                )
+            }
+
+            Button(
+                onClick = { println(httpRequest) }
+            ) {
+                Text("send")
+            }
         }
     }
 }
