@@ -1,5 +1,6 @@
 package com.zer0s2m.keeper.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -7,7 +8,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -207,23 +208,37 @@ fun TopPanelHttpRequest(httpRequest: HttpRequest) {
                 Divider(
                     color = Color.Gray,
                     modifier = Modifier
-                        .height(0.dp)
-                        .width(PADDING * 2),
+                        .fillMaxHeight()
+                        .width(1.dp),
                 )
 
                 val urlHttpRequest: MutableState<String> = remember { mutableStateOf(httpRequest.url) }
-                TextFieldURLHttpRequest(
-                    url = urlHttpRequest.value,
-                    onValueChange = { newValue: String ->
-                        urlHttpRequest.value = newValue
-                    }
-                )
+                Spacer(modifier = Modifier.padding(start = PADDING * 2))
+                Row(modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .fillMaxHeight()
+                ) {
+                    TextFieldURLHttpRequest(
+                        url = urlHttpRequest.value,
+                        onValueChange = { newValue: String ->
+                            urlHttpRequest.value = newValue
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
 
-            Button(
-                onClick = { println(httpRequest) }
+            ButtonSendRequest(
+                onClick = { println(httpRequest) },
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(100.dp),
+                modifierButton = Modifier.background(color = MaterialTheme.colors.primary)
             ) {
-                Text("send")
+                Text(
+                    text = "send",
+                    color = Color.White
+                )
             }
         }
     }

@@ -187,3 +187,28 @@ fun ButtonArrowLeft(
         )
     }
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ButtonSendRequest(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    modifierButton: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    enabled: Boolean = true,
+    content: @Composable RowScope.() -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = shape,
+        modifier = modifier.semantics { role = Role.Button },
+        enabled = enabled,
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifierButton.pointerHoverIcon(icon = PointerIcon.Hand),
+            content = content,
+        )
+    }
+}

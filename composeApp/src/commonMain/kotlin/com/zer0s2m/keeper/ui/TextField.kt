@@ -1,11 +1,7 @@
 package com.zer0s2m.keeper.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
@@ -46,18 +42,16 @@ fun TextFieldURLHttpRequest(
             .current
             .merge(
                 TextStyle(
-                color = colors.textColor(true).value,
-                fontSize = 14.sp
-            )
+                    color = colors.textColor(true).value,
+                    fontSize = 14.sp
+                )
             ),
         cursorBrush = SolidColor(
             TextFieldDefaults
-            .textFieldColors()
-            .cursorColor(false).value),
-        modifier = modifier
-            .background(
-                colors.backgroundColor(true).value, RoundedCornerShape(4.dp)
-            ),
+                .textFieldColors()
+                .cursorColor(false).value
+        ),
+        modifier = modifier,
         singleLine = true,
         decorationBox = @Composable { innerTextField ->
             TextFieldDefaults.TextFieldDecorationBox(
